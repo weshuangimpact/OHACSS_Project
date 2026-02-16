@@ -17,8 +17,11 @@
             background-attachment: fixed !important;
         }
 
-        /* 內容區塊置中 (配合 Global CSS 的 Flex 架構) */
+/* 內容區塊置中 (配合 Global CSS 的 Flex 架構) */
         .main-wrapper {
+            /* ★★★ 關鍵修正：加入這行，強制撐開高度，把 Footer 推到底部 ★★★ */
+            flex: 1; 
+            
             display: flex;
             align-items: center;
             justify-content: center;
