@@ -1,0 +1,54 @@
+/* css/global.css */
+/* =========================================
+   統一頁首/頁尾 CSS 設定 (高度統一版)
+   來源：原 dashboard.html <style>
+   ========================================= */
+
+:root {
+    --primary-bg: #f8f9fa;
+    --card-hover-transform: translateY(-5px);
+}
+
+html {
+    height: 100%; /* 確保根元素高度 */
+}
+
+body {
+    background-color: var(--primary-bg);
+    font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+    
+    /* 使用 min-height: 100vh 確保背景色至少填滿一頁 */
+    min-height: 100vh;
+    
+    display: none; /* 權限驗證前先隱藏，驗證後透過 JS 改為 flex */
+    flex-direction: column;
+}
+
+/* 內容區塊自動撐開 (讓 footer 置底) */
+.container, .main-content {
+    flex: 1;
+}
+
+/* 頁首設定 */
+.navbar {
+    background-color: #202124 !important; /* 統一深黑色 */
+    min-height: 85px;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+/* 頁尾設定 */
+footer {
+    background-color: #202124 !important;
+    color: #fff;
+    flex-shrink: 0;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto; /* 確保置底 */
+    padding: 15px 0;
+    min-height: 85px;
+}
