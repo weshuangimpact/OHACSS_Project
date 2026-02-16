@@ -1,32 +1,18 @@
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand d-flex align-items-center" href="dashboard.html">
-            <i class="fas fa-shield-virus fa-lg me-2 text-warning"></i>
-            <div>
-                OHACSS 職安衛管理系統
-                <div style="font-size: 0.75rem; font-weight: normal; color: #aaa;">Occupational Health Management System</div>
-            </div>
+<nav class="navbar navbar-expand-lg navbar-dark px-4">
+    <div class="container-fluid d-flex justify-content-between align-items-center p-0">
+        <a class="navbar-brand d-flex align-items-center fw-bold" href="dashboard.html">
+            <i class="fas fa-shield-alt me-2"></i>
+            OHACSS 職業健康評鑑與合規支援系統
         </a>
-        
-        <div class="d-flex align-items-center text-light">
-            <div class="me-4 d-none d-md-block text-end">
-                <div id="header-date" class="small text-white-50">載入中...</div>
-                <div id="header-clock" class="fw-bold fs-5" style="font-family: monospace;">--:--:--</div>
-            </div>
 
-            <div class="dropdown">
-                <a href="#" class="text-white text-decoration-none dropdown-toggle d-flex align-items-center" id="userDropdown" data-bs-toggle="dropdown">
-                    <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 35px; height: 35px;">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <span id="header-user">訪客</span>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end shadow">
-                    <li><a class="dropdown-item" href="profile_settings.html"><i class="fas fa-cog me-2"></i>個人設定</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item text-danger" href="#" id="logout-btn"><i class="fas fa-sign-out-alt me-2"></i>登出系統</a></li>
-                </ul>
-            </div>
+        <div class="d-flex align-items-center">
+            <span class="text-white me-3 small" id="header-date"></span>
+            <span class="text-white me-4 small border-start ps-3 border-secondary" id="header-clock"></span>
+            <span class="text-white me-4 fw-bold" id="header-user"></span>
+
+            <button class="btn btn-outline-light btn-sm" onclick="logoutSystem()">
+                <i class="fas fa-sign-out-alt me-1"></i>登出
+            </button>
         </div>
     </div>
 </nav>
