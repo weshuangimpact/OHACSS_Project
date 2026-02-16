@@ -1,5 +1,5 @@
 // js/utils.js
-// 【共用邏輯】日期與時鐘計算 (純邏輯)
+// 工具函式庫 (時間日期)
 
 function initHeaderDate() {
     const dateEl = document.getElementById('header-date');
@@ -23,5 +23,3 @@ function initClock() {
     updateClock();
     setInterval(updateClock, 1000);
 }
-
-// 注意：這裡移除了 DOMContentLoaded 監聽，改由 layout.js 呼叫
