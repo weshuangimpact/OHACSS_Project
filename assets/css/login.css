@@ -1,9 +1,8 @@
 /* =========================================
    Login Page Specific Styles
-   對應檔案: css/login.css 
+   來源：原 login.html <style> 區塊的卡片部分
    ========================================= */
 
-/* 登入卡片設定 */
 .login-card {
     width: 100%; 
     max-width: 400px; 
