@@ -13,17 +13,7 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark px-4">
-        <div class="container-fluid d-flex justify-content-between align-items-center p-0">
-            <a class="navbar-brand d-flex align-items-center fw-bold" href="#">
-                <i class="fas fa-shield-alt me-2"></i> OHACSS 職業健康評鑑與合規支援系統
-            </a>
-            <div class="d-flex align-items-center">
-                <span class="text-white me-3 small" id="header-date"><i class="fas fa-spinner fa-spin"></i></span>
-                <span class="text-white small border-start ps-3 border-secondary" id="header-clock" style="opacity: 0.9;">--:--</span>
-            </div>
-        </div>
-    </nav>
+    <div id="app-header"></div>
 
     <div class="main-content">
         <div class="card login-card">
@@ -67,12 +57,7 @@
         </div>
     </div>
 
-    <footer>
-        <div class="mb-1">可信智慧整合有限公司 42917004</div>
-        <div class="small opacity-75" style="font-family: 'Segoe UI', sans-serif; letter-spacing: 1px;">
-            WesmartAI , Making Trust Transparent.
-        </div>
-    </footer>
+    <div id="app-footer"></div>
 
     <div class="modal fade" id="forgotModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
@@ -98,6 +83,7 @@
 
     <script src="js/config.js"></script>
     <script src="js/utils.js"></script>
+    <script src="js/layout.js"></script>
     <script src="js/index.js"></script>
 
 </body>
