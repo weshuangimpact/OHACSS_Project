@@ -1,5 +1,5 @@
 /* =========================================
-   Login Page Specific Styles
+   Index Page Specific Styles (首頁/登入頁專用)
    來源：原 login.html <style> 區塊的卡片部分
    ========================================= */
 
@@ -42,7 +42,7 @@
     display: none; 
 }
 
-/* 錯誤震動動畫 */
+/* 動畫效果 */
 .shake { 
     animation: shake 0.5s; 
 }
