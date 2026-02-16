@@ -1,52 +1,30 @@
-/* =========================================
-   Global Styles (全域共用)
-   來源：原 login.html <style> 區塊的通用部分
-   ========================================= */
+/* css/global.css */
+/* 全域佈局設定 */
 
-html, body { 
-    height: 100%; 
-}
-
-body {
-    display: flex; 
-    flex-direction: column; 
-    min-height: 100vh;
-    background-color: #f8f9fa; 
-    font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif; 
+html, body {
+    height: 100%;
     margin: 0;
 }
 
-/* 主要內容區塊 (包含背景漸層) */
-.main-content {
-    flex: 1; 
-    width: 100%;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    padding: 20px;
-}
-
-/* Navbar 全域設定 */
-.navbar { 
-    background-color: #202124 !important; 
-    min-height: 85px; 
-    color: #fff; 
-    flex-shrink: 0; 
-}
-
-/* Footer 全域設定 */
-footer {
-    background-color: #202124 !important; 
-    color: #fff; 
-    flex-shrink: 0; 
-    font-size: 0.9rem;
-    letter-spacing: 0.5px; 
-    display: flex; 
+body {
+    display: flex;
     flex-direction: column;
-    align-items: center; 
-    justify-content: center; 
-    margin-top: auto; 
-    padding: 15px 0; 
-    min-height: 85px;
+    min-height: 100vh;
+    background-color: #f8f9fa; /* 統一淺灰背景 */
+    font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+}
+
+/* 確保 Navbar 與 Footer 不會被壓縮 */
+.navbar, footer {
+    flex-shrink: 0;
+}
+
+/* 讓中間內容區自動撐開 */
+.main-wrapper, .container-fluid {
+    flex: 1;
+}
+
+/* 連結無底線設定 */
+a {
+    text-decoration: none;
 }
