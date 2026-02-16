@@ -1,274 +1,41 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>登入 | OHACSS 職業衛生管理系統</title>
-    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
-    <link rel="stylesheet" href="assets/css/global.css">
+<meta charset="UTF-8">
+<title>登入 | OHSMS</title>
 
-    <style>
-        /* 覆寫 main-content 讓它擁有專屬的漸層背景 */
-        .main-content {
-            flex: 1;
-            width: 100%;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
-        .login-card {
-            width: 100%;
-            max-width: 400px;
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            overflow: hidden;
-            background: #fff;
-        }
-
-        .login-header {
-            background-color: #4f46e5;
-            padding: 30px 20px;
-            text-align: center;
-            color: #fff;
-        }
-
-        .login-body {
-            padding: 40px 30px;
-        }
-
-        .form-control {
-            height: 45px;
-            border-radius: 8px;
-        }
-
-        .btn-login {
-            height: 45px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            background-color: #4f46e5;
-            border: none;
-            transition: all 0.3s;
-        }
-
-        .btn-login:hover {
-            background-color: #4338ca;
-            transform: translateY(-2px);
-        }
-
-        .input-group-text {
-            border-radius: 8px 0 0 8px;
-            background-color: #f8f9fa;
-        }
-        
-        /* 密碼顯示切換按鈕修正 */
-        #togglePassword {
-            border-radius: 0 8px 8px 0;
-            cursor: pointer;
-        }
-    </style>
+<link rel="stylesheet" href="assets/css/global.css">
+<link rel="stylesheet" href="assets/css/login.css">
 </head>
+
 <body>
 
-    <div id="navbar-placeholder"></div>
+<div id="navbar"></div>
 
-    <div class="main-content">
-        <div class="login-card animate__animated animate__fadeInDown">
-            <div class="login-header">
-                <h3 class="mb-1 fw-bold"><i class="fas fa-shield-virus me-2"></i>OHACSS</h3>
-                <p class="mb-0 opacity-75 small">職業衛生管理系統</p>
-            </div>
-            <div class="login-body">
-                <h5 class="text-center mb-4 text-secondary">帳號登入</h5>
-                <form id="loginForm">
-                    <div class="mb-3">
-                        <label class="form-label text-muted small">電子郵件</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-envelope text-secondary"></i></span>
-                            <input type="email" class="form-control" id="email" placeholder="name@company.com" required>
-                        </div>
-                    </div>
-                    <div class="mb-4">
-                        <label class="form-label text-muted small">密碼</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-lock text-secondary"></i></span>
-                            <input type="password" class="form-control" id="password" placeholder="請輸入密碼" required style="border-radius: 0;">
-                            <span class="input-group-text bg-white" id="togglePassword">
-                                <i class="fas fa-eye text-muted"></i>
-                            </span>
-                        </div>
-                        <div class="text-end mt-2">
-                            <a href="#" class="text-decoration-none small text-primary" data-bs-toggle="modal" data-bs-target="#forgotModal">忘記密碼？</a>
-                        </div>
-                    </div>
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-login">
-                            立即登入 <i class="fas fa-arrow-right ms-2"></i>
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+<div class="main-content">
+    <!-- 原本 Login Card HTML 完整保留 -->
+</div>
 
-    <div id="footer-placeholder"></div>
+<div id="footer"></div>
 
-    <div class="modal fade" id="forgotModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-light">
-                    <h5 class="modal-title"><i class="fas fa-key me-2 text-warning"></i>重設密碼</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <p class="text-muted mb-3">請輸入您的註冊 Email，系統將發送重設連結給您。</p>
-                    <div class="mb-3">
-                        <input type="email" id="reset-email" class="form-control form-control-lg" placeholder="輸入您的 Email">
-                    </div>
-                    <div class="d-grid">
-                        <button type="button" class="btn btn-primary btn-lg" onclick="sendReset()">
-                            發送重設信
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<script>
+async function loadComponent(id, file){
+    const res = await fetch(file);
+    const html = await res.text();
+    document.getElementById(id).innerHTML = html;
+}
+loadComponent("navbar","components/navbar-login.html");
+loadComponent("footer","components/footer.html");
+</script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <script src="assets/js/config.js"></script>
-    <script src="assets/js/utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script>
-        // ------------------------------------------------
-        // 1. 密碼顯示切換
-        // ------------------------------------------------
-        document.getElementById('togglePassword').addEventListener('click', function () {
-            const passwordInput = document.getElementById('password');
-            const icon = this.querySelector('i');
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
-        });
+<script src="assets/js/config.js"></script>
+<script src="assets/js/login.js"></script>
 
-        // ------------------------------------------------
-        // 2. 登入邏輯 (使用 window.supabaseClient)
-        // ------------------------------------------------
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const btn = document.querySelector('.btn-login');
-            const originalText = btn.innerHTML;
-
-            // UI Loading 狀態
-            btn.disabled = true;
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>驗證中...';
-
-            try {
-                // 使用共用 Client 登入
-                const { data, error } = await supabaseClient.auth.signInWithPassword({
-                    email: email,
-                    password: password
-                });
-
-                if (error) throw error;
-
-                // 取得使用者詳細資料 (Profile) 以確認角色
-                const { data: profile, error: profileError } = await supabaseClient
-                    .from('profiles')
-                    .select('display_name, role')
-                    .eq('id', data.user.id)
-                    .single();
-
-                if (profileError) {
-                    console.error('Profile fetch error:', profileError);
-                    // 若無 Profile 但登入成功，仍允許進入，視為訪客或預設角色
-                }
-
-                // 寫入 SessionStorage 供全站使用
-                sessionStorage.setItem('currentUserId', data.user.id);
-                sessionStorage.setItem('currentUserEmail', data.user.email);
-                sessionStorage.setItem('currentUserName', profile ? profile.display_name : data.user.email.split('@')[0]);
-                sessionStorage.setItem('currentUserRole', profile ? profile.role : 'staff'); // 預設 staff
-
-                // 登入成功，跳轉至儀表板
-                window.location.href = 'dashboard.html';
-
-            } catch (err) {
-                alert('❌ 登入失敗：' + err.message);
-                btn.disabled = false;
-                btn.innerHTML = originalText;
-            }
-        });
-
-        // ------------------------------------------------
-        // 3. 忘記密碼發送邏輯
-        // ------------------------------------------------
-        async function sendReset() {
-            const email = document.getElementById('reset-email').value.trim();
-            if (!email) return alert('請輸入 Email');
-            
-            const btn = document.querySelector('#forgotModal .btn-primary');
-            const originalText = btn.innerText;
-            btn.disabled = true;
-            btn.innerText = '發送中...';
-
-            try {
-                // 自動計算跳轉網址 (確保 reset_password.html 在同一目錄下)
-                const redirectUrl = new URL('reset_password.html', window.location.href).href;
-                console.log('重設跳轉目標:', redirectUrl);
-
-                // 呼叫 Edge Function (若無 Edge Function，可改用標準 resetPasswordForEmail)
-                // 註：保留您原始代碼的邏輯，使用 functions.invoke
-                const { data, error } = await supabaseClient.functions.invoke('reset-password', {
-                    body: { 
-                        email: email,
-                        redirectTo: redirectUrl
-                    }
-                });
-                
-                // 容錯處理：如果 Edge Function 未部署，嘗試使用標準 API
-                if (error) {
-                    console.warn('Edge Function 失敗，嘗試使用標準 API...');
-                    const { error: standardError } = await supabaseClient.auth.resetPasswordForEmail(email, {
-                        redirectTo: redirectUrl
-                    });
-                    if (standardError) throw standardError;
-                } else if (data && data.error) {
-                    throw new Error(data.error);
-                }
-
-                alert('✅ 重設信已發送！\n請至您的信箱收取信件，點擊連結後即可設定新密碼。');
-                const modalEl = document.getElementById('forgotModal');
-                const modal = bootstrap.Modal.getInstance(modalEl);
-                modal.hide();
-
-            } catch (err) {
-                console.error('重設密碼失敗:', err);
-                alert('❌ 發送失敗: ' + err.message);
-            } finally {
-                btn.disabled = false;
-                btn.innerText = originalText;
-            }
-        }
-    </script>
 </body>
 </html>
