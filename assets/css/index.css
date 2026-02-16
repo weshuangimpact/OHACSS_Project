@@ -1,8 +1,14 @@
-/* =========================================
-   Index Page Specific Styles (首頁/登入頁專用)
-   來源：原 login.html <style> 區塊的卡片部分
-   ========================================= */
+/* css/index.css */
+/* 首頁(登入頁) 專屬樣式 */
 
+/* 1. 覆蓋全域背景，使用登入頁專屬的漸層色 */
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    /* 確保漸層填滿 */
+    background-attachment: fixed; 
+}
+
+/* 2. 登入卡片設定 */
 .login-card {
     width: 100%; 
     max-width: 400px; 
@@ -11,8 +17,11 @@
     box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
     overflow: hidden; 
     background-color: #fff;
+    /* 確保卡片在畫面中央 */
+    margin: auto; 
 }
 
+/* 卡片頭部 (維持深色風格) */
 .card-header { 
     background-color: #2c3e50; 
     color: white; 
@@ -21,18 +30,21 @@
     border-bottom: none; 
 }
 
+/* 登入按鈕 */
 .login-btn { 
     background-color: #2c3e50; 
     border: none; 
     padding: 10px; 
     font-weight: 600; 
     letter-spacing: 1px; 
+    transition: background-color 0.3s;
 }
 
 .login-btn:hover { 
     background-color: #34495e; 
 }
 
+/* 輸入框聚焦效果 */
 .form-control:focus { 
     border-color: #2c3e50; 
     box-shadow: 0 0 0 0.2rem rgba(44, 62, 80, 0.25); 
@@ -42,7 +54,7 @@
     display: none; 
 }
 
-/* 動畫效果 */
+/* 3. 錯誤震動動畫 (Shake Animation) */
 .shake { 
     animation: shake 0.5s; 
 }
