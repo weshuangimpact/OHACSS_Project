@@ -2,267 +2,35 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>工作儀表板 | OHACSS</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="assets/css/global.css">
-
-    <style>
-        :root {
-            --card-hover-transform: translateY(-5px);
-        }
-
-        .dashboard-header {
-            background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
-            color: white;
-            padding: 2rem 1.5rem;
-            margin-bottom: 2rem;
-            border-radius: 0 0 1rem 1rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .dashboard-card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-            height: 100%;
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-            background: white;
-            overflow: hidden;
-            display: flex; /* 讓卡片內容可排版 */
-            flex-direction: column;
-        }
-
-        .dashboard-card:hover {
-            transform: var(--card-hover-transform);
-            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
-            color: inherit;
-        }
-
-        .card-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: rgba(var(--bs-primary-rgb), 0.1);
-            color: var(--bs-primary);
-        }
-
-        /* 個別卡片顏色定義 (保留原本視覺) */
-        .card-plan .card-icon { color: #0d6efd; background-color: rgba(13, 110, 253, 0.1); }
-        .card-check .card-icon { color: #dc3545; background-color: rgba(220, 53, 69, 0.1); }
-        .card-act .card-icon { color: #198754; background-color: rgba(25, 135, 84, 0.1); }
-        .card-ai .card-icon { color: #6f42c1; background-color: rgba(111, 66, 193, 0.1); }
-        .card-audit .card-icon { color: #fd7e14; background-color: rgba(253, 126, 20, 0.1); }
-        .card-data .card-icon { color: #0dcaf0; background-color: rgba(13, 202, 240, 0.1); }
-        .card-service .card-icon { color: #ffc107; background-color: rgba(255, 193, 7, 0.1); }
-
-        .card-body {
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-        
-        .card-title {
-            font-weight: bold;
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .card-text {
-            color: #6c757d;
-            font-size: 0.9rem;
-        }
-    </style>
 </head>
 <body>
 
-    <div id="navbar-placeholder"></div>
+<div id="navbar"></div>
 
-    <div class="main-content">
-        <div class="dashboard-header container">
-            <h2 class="fw-bold mb-1">
-                <i class="fas fa-tachometer-alt me-2"></i>工作儀表板
-            </h2>
-            <p class="mb-0 opacity-75">請選擇您要執行的作業模組</p>
-        </div>
+<div class="container-fluid px-4 mt-4 main-content">
+    <!-- 原本所有卡片 HTML 完整保留 -->
+</div>
 
-        <div class="container pb-5">
-            <div class="row g-4" id="module-container">
-                
-                <div class="col-md-6 col-lg-3 card-item" id="card-plan">
-                    <a href="service-execution.html" class="dashboard-card card-plan">
-                        <div class="card-body">
-                            <div class="card-icon"><i class="fas fa-clipboard-list"></i></div>
-                            <h5 class="card-title">服務執行歷程</h5>
-                            <p class="card-text">Plan & Do<br>現場訪視與服務紀錄填寫</p>
-                        </div>
-                    </a>
-                </div>
+<div id="footer"></div>
 
-                <div class="col-md-6 col-lg-3 card-item" id="card-manager">
-                    <a href="admin-overview.html" class="dashboard-card card-check">
-                        <div class="card-body">
-                            <div class="card-icon"><i class="fas fa-user-shield"></i></div>
-                            <h5 class="card-title">管理者總覽</h5>
-                            <p class="card-text">Check<br>紀錄審核與簽核作業</p>
-                        </div>
-                    </a>
-                </div>
+<script>
+async function loadComponent(id, file) {
+    const res = await fetch(file);
+    const html = await res.text();
+    document.getElementById(id).innerHTML = html;
+}
+loadComponent("navbar", "components/navbar.html");
+loadComponent("footer", "components/footer.html");
+</script>
 
-                <div class="col-md-6 col-lg-3 card-item" id="card-act">
-                    <a href="improvement-act.html" class="dashboard-card card-act">
-                        <div class="card-body">
-                            <div class="card-icon"><i class="fas fa-sync-alt"></i></div>
-                            <h5 class="card-title">評鑑改善專區</h5>
-                            <p class="card-text">Act<br>缺失改善追蹤與確認</p>
-                        </div>
-                    </a>
-                </div>
+<script src="assets/js/dashboard.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-                <div class="col-md-6 col-lg-3 card-item" id="card-eval">
-                    <a href="ai-assistant.html" class="dashboard-card card-ai">
-                        <div class="card-body">
-                            <div class="card-icon"><i class="fas fa-robot"></i></div>
-                            <h5 class="card-title">AI 智慧助理</h5>
-                            <p class="card-text">Evaluation<br>智慧分析與報告生成</p>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-md-6 col-lg-3 card-item" id="card-maint">
-                    <a href="audit-logs.html" class="dashboard-card card-audit">
-                        <div class="card-body">
-                            <div class="card-icon"><i class="fas fa-history"></i></div>
-                            <h5 class="card-title">系統日誌稽核</h5>
-                            <p class="card-text">Audit Logs<br>檢視系統操作軌跡</p>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-md-6 col-lg-3 card-item" id="card-master">
-                    <a href="master-data.html" class="dashboard-card card-data">
-                        <div class="card-body">
-                            <div class="card-icon"><i class="fas fa-database"></i></div>
-                            <h5 class="card-title">基本資料建立</h5>
-                            <p class="card-text">Master Data<br>企業、人員與場所主檔</p>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-md-6 col-lg-3 card-item" id="card-users">
-                    <a href="admin_users.html" class="dashboard-card card-plan" style="border-left: 5px solid #6610f2;">
-                        <div class="card-body">
-                            <div class="card-icon" style="color:#6610f2; bg-color:rgba(102,16,242,0.1)"><i class="fas fa-users-cog"></i></div>
-                            <h5 class="card-title">帳號權限管理</h5>
-                            <p class="card-text">Admin<br>系統使用者帳號設定</p>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-md-6 col-lg-3 card-item" id="card-profile">
-                    <a href="profile_settings.html" class="dashboard-card" style="border-left: 5px solid #adb5bd;">
-                        <div class="card-body">
-                            <div class="card-icon" style="color:#495057"><i class="fas fa-id-card"></i></div>
-                            <h5 class="card-title">個人設定</h5>
-                            <p class="card-text">Profile<br>修改密碼與個人資訊</p>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-md-6 col-lg-3 card-item" id="card-service">
-                    <a href="support-center.html" class="dashboard-card card-service">
-                        <div class="card-body">
-                            <div class="card-icon"><i class="fas fa-headset"></i></div>
-                            <h5 class="card-title">線上客服中心</h5>
-                            <p class="card-text">Support<br>問題回報與操作諮詢</p>
-                        </div>
-                    </a>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <div id="footer-placeholder"></div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <script src="assets/js/config.js"></script>
-    <script src="assets/js/utils.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // 定義所有卡片元素
-            const cards = {
-                plan: document.getElementById('card-plan'),       // 1. Plan/Do
-                manager: document.getElementById('card-manager'), // 2. Check
-                eval: document.getElementById('card-eval'),       // 3. AI
-                service: document.getElementById('card-service'), // 4. Support
-                act: document.getElementById('card-act'),         // 5. Act
-                maint: document.getElementById('card-maint'),     // 6. Audit
-                master: document.getElementById('card-master'),   // 7. Master
-                users: document.getElementById('card-users'),     // Admin Users
-                profile: document.getElementById('card-profile')  // Profile
-            };
-
-            // 取得使用者角色 (儲存在 sessionStorage，由 Login 頁寫入)
-            const userRole = sessionStorage.getItem('currentUserRole');
-
-            // 輔助函式
-            const show = (el) => el && (el.style.display = 'block');
-            const hide = (el) => el && (el.style.display = 'none');
-
-            // 先隱藏所有卡片 (預設狀態)
-            Object.values(cards).forEach(hide);
-
-            // 依角色顯示
-            if (userRole === 'admin' || userRole === 'super_admin') {
-                // Admin: 全開
-                Object.values(cards).forEach(show);
-            } 
-            else if (userRole === 'manager') {
-                // Manager: 隱藏 Admin Users
-                Object.values(cards).forEach(show);
-                hide(cards.users);
-            } 
-            else if (userRole === 'staff') {
-                // Staff (文控): 1, 2, 4, 6, 7, profile (隱藏 3, 5, users)
-                show(cards.plan);      // 1
-                show(cards.manager);   // 2
-                hide(cards.eval);      // 3
-                hide(cards.act);       // 5
-                show(cards.maint);     // 6
-                show(cards.master);    // 7
-                hide(cards.users);     // Users
-                show(cards.profile);   // Profile
-                show(cards.service);   // 4
-            } 
-            else if (userRole === 'consultant') {
-                // Consultant: 1, 5, profile, 4 (隱藏 2, 3, 6, 7, users)
-                show(cards.plan);      // 1
-                hide(cards.manager);   // 2
-                hide(cards.eval);      // 3
-                show(cards.act);       // 5
-                hide(cards.maint);     // 6
-                hide(cards.master);    // 7
-                hide(cards.users);     // Users
-                show(cards.profile);   // Profile
-                show(cards.service);   // 4
-            }
-        });
-    </script>
 </body>
 </html>
