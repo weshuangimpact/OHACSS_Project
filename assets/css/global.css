@@ -1,110 +1,52 @@
-:root {
-    --primary-bg: #f8f9fa;
-    --card-hover-transform: translateY(-5px);
+/* =========================================
+   Global Styles (全域樣式)
+   來源：原 login.html <style> 區塊的通用部分
+   ========================================= */
+
+html, body { 
+    height: 100%; 
 }
 
-/* ===== Layout ===== */
-
-html { height: 100%; }
-
 body {
-    background-color: var(--primary-bg);
-    font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+    display: flex; 
+    flex-direction: column; 
     min-height: 100vh;
-    display: none;
-    flex-direction: column;
+    background-color: #f8f9fa; 
+    font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif; 
     margin: 0;
 }
 
+/* 主要內容區塊 (包含背景漸層) */
 .main-content {
-    flex: 1;
+    flex: 1; 
     width: 100%;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    padding: 20px;
 }
 
-.navbar {
-    background-color: #202124 !important;
-    min-height: 85px;
-    color: #fff;
-    flex-shrink: 0;
+/* Navbar 全域設定 */
+.navbar { 
+    background-color: #202124 !important; 
+    min-height: 85px; 
+    color: #fff; 
+    flex-shrink: 0; 
 }
 
+/* Footer 全域設定 */
 footer {
-    background-color: #202124 !important;
-    color: #fff;
-    flex-shrink: 0;
+    background-color: #202124 !important; 
+    color: #fff; 
+    flex-shrink: 0; 
     font-size: 0.9rem;
-    letter-spacing: 0.5px;
-    display: flex;
+    letter-spacing: 0.5px; 
+    display: flex; 
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: auto;
-    padding: 15px 0;
+    align-items: center; 
+    justify-content: center; 
+    margin-top: auto; 
+    padding: 15px 0; 
     min-height: 85px;
-}
-
-.container-fluid {
-    padding-left: 2rem;
-    padding-right: 2rem;
-}
-
-/* ===== Dashboard Cards ===== */
-
-.dashboard-card {
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    transition: all 0.3s ease;
-    cursor: pointer;
-    height: 100%;
-    border-left: 4px solid transparent;
-}
-
-.dashboard-card:hover {
-    transform: var(--card-hover-transform);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-}
-
-.card-plan { border-left-color: #0d6efd; }
-.card-check { border-left-color: #198754; }
-.card-eval { border-left-color: #ffc107; }
-.card-act { border-left-color: #dc3545; }
-.card-data { border-left-color: #4f46e5; }
-.card-admin { border-left-color: #212529; }
-.card-account { border-left-color: #0dcaf0; }
-.card-profile { border-left-color: #6c757d; }
-.card-service { border-left-color: #e83e8c; }
-
-.icon-wrapper {
-    width: 50px;
-    height: 50px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.25rem;
-}
-
-.guide-text {
-    font-size: 0.85rem;
-    color: #6c757d;
-    line-height: 1.4;
-    margin-top: 8px;
-}
-
-.instruction-box {
-    background-color: #fff;
-    border-left: 5px solid #202124;
-    padding: 20px 25px;
-    border-radius: 4px;
-    margin-bottom: 30px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    width: 100%;
-}
-
-.instruction-title {
-    color: #202124;
-    font-weight: 700;
-    margin-bottom: 10px;
-    font-size: 1.1rem;
 }
