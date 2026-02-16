@@ -1,0 +1,51 @@
+/* css/dashboard.css */
+/* 儀表板專屬樣式 (保留原始配色設定) */
+
+.dashboard-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.icon-box {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+.hover-shadow:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* --- 功能分色系統 (原始設定) --- */
+
+/* 1. 服務執行 (Plan & Do) - 藍色系 */
+.card-service { border-left: 5px solid #0d6efd; }
+.card-service .icon-box { background-color: rgba(13, 110, 253, 0.1); color: #0d6efd; }
+.card-service .btn-outline-primary:hover { background-color: #0d6efd; color: white; }
+
+/* 2. AI 助手 (Check & Action) - 綠色系 */
+.card-ai { border-left: 5px solid #198754; }
+.card-ai .icon-box { background-color: rgba(25, 135, 84, 0.1); color: #198754; }
+.card-ai .btn-outline-success:hover { background-color: #198754; color: white; }
+
+/* 3. 管理員功能 - 紅色系 */
+.card-admin { border-left: 5px solid #dc3545; }
+.card-admin .icon-box { background-color: rgba(220, 53, 69, 0.1); color: #dc3545; }
+.card-admin .btn-outline-danger:hover { background-color: #dc3545; color: white; }
+
+/* 4. 系統設定 - 灰色系 */
+.card-system { border-left: 5px solid #6c757d; }
+.card-system .icon-box { background-color: rgba(108, 117, 125, 0.1); color: #6c757d; }
+.card-system .btn-outline-secondary:hover { background-color: #6c757d; color: white; }
