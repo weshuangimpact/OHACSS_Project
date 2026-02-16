@@ -1,65 +1,110 @@
-/* =========================================
-   1. 全域變數與重置
-   ========================================= */
 :root {
     --primary-bg: #f8f9fa;
-    --nav-bg: #202124;
-    --text-color: #333;
-    --footer-bg: #fff;
-    --footer-text: #6c757d;
+    --card-hover-transform: translateY(-5px);
 }
 
-html, body {
-    height: 100%;
-}
+/* ===== Layout ===== */
+
+html { height: 100%; }
 
 body {
-    display: none; /* 權限驗證前隱藏，由 utils.js 控制顯示 */
-    flex-direction: column;
-    min-height: 100vh;
     background-color: var(--primary-bg);
     font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
-    color: var(--text-color);
+    min-height: 100vh;
+    display: none;
+    flex-direction: column;
+    margin: 0;
 }
 
-/* 內容區塊自動撐開 */
-.container, .main-content, .container-fluid {
+.main-content {
     flex: 1;
+    width: 100%;
 }
 
-/* =========================================
-   2. 統一 Navbar 樣式
-   ========================================= */
 .navbar {
-    background-color: var(--nav-bg) !important;
-    min-height: 80px;
-    padding: 0.5rem 1.5rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: #202124 !important;
+    min-height: 85px;
+    color: #fff;
+    flex-shrink: 0;
 }
 
-.navbar-brand {
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-
-.navbar-brand img {
-    height: 40px; 
-    margin-right: 10px;
-}
-
-.text-white-50 {
-    color: rgba(255, 255, 255, 0.5) !important;
-}
-
-/* =========================================
-   3. 統一 Footer 樣式
-   ========================================= */
 footer {
-    background-color: var(--footer-bg);
-    border-top: 1px solid #dee2e6;
-    padding: 1.5rem 0;
-    margin-top: auto; /* 推到最底 */
-    text-align: center;
+    background-color: #202124 !important;
+    color: #fff;
+    flex-shrink: 0;
     font-size: 0.9rem;
-    color: var(--footer-text);
+    letter-spacing: 0.5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto;
+    padding: 15px 0;
+    min-height: 85px;
+}
+
+.container-fluid {
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+/* ===== Dashboard Cards ===== */
+
+.dashboard-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    height: 100%;
+    border-left: 4px solid transparent;
+}
+
+.dashboard-card:hover {
+    transform: var(--card-hover-transform);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.card-plan { border-left-color: #0d6efd; }
+.card-check { border-left-color: #198754; }
+.card-eval { border-left-color: #ffc107; }
+.card-act { border-left-color: #dc3545; }
+.card-data { border-left-color: #4f46e5; }
+.card-admin { border-left-color: #212529; }
+.card-account { border-left-color: #0dcaf0; }
+.card-profile { border-left-color: #6c757d; }
+.card-service { border-left-color: #e83e8c; }
+
+.icon-wrapper {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+.guide-text {
+    font-size: 0.85rem;
+    color: #6c757d;
+    line-height: 1.4;
+    margin-top: 8px;
+}
+
+.instruction-box {
+    background-color: #fff;
+    border-left: 5px solid #202124;
+    padding: 20px 25px;
+    border-radius: 4px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    width: 100%;
+}
+
+.instruction-title {
+    color: #202124;
+    font-weight: 700;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
 }
