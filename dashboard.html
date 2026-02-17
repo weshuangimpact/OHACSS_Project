@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工作儀表板 | OHACSS</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <link href="style.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --card-hover-transform: translateY(-5px);
+        }
+
+        /* 原 Dashboard UI 設定 (保留不變) */
+        .dashboard-card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            height: 100%;
+            border-left: 4px solid transparent; /* 左側飾條預留 */
+        }
+        .dashboard-card:hover {
+            transform: var(--card-hover-transform);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 卡片左側飾條顏色定義 (對應 PDCA) */
+        .card-plan { border-left-color: var(--sys-plan, #0d6efd); }
+        .card-check { border-left-color: var(--sys-do, #198754); }
+        .card-eval { border-left-color: var(--sys-check, #ffc107); }
+        .card-act { border-left-color: var(--sys-act, #dc3545); }
+        .card-data { border-left-color: #4f46e5; }
+        .card-admin { border-left-color: #212529; }
+        .card-account { border-left-color: #0dcaf0; }
+        .card-profile { border-left-color: #6c757d; }
+        .card-service { border-left-color: #e83e8c; }
+
+        .icon-wrapper {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        .guide-text {
+            font-size: 0.85rem;
+            color: #6c757d;
+            line-height: 1.4;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid px-4 mt-4 main-content">
+        
+        <div class="mb-4">
+            <h2 class="fw-bold text-dark mb-1">工作儀表板</h2>
+            <p class="text-secondary">請選擇下方功能模組進行操作</p>
+        </div>
+
+        <div class="instruction-box">
+            <div class="instruction-title">
+                <i class="fas fa-network-wired me-2"></i>系統設計精神：PDCA × Evidence × 5W1H
+            </div>
+            <p class="mb-0 text-dark" style="line-height: 1.6;">
+                本系統以 PDCA 持續改善循環 為核心，結合 Evidence-based 證據導向管理 與 5W1H 可追溯設計原則，將服務規劃、執行、審查與改善行動完整串聯於單一管理架構中。透過結構化資料與版本控管機制，確保所有服務與評鑑歷程皆可被重建、追溯與驗證，作為組織進行績效評估、合規審查與持續改善的可信基礎。
+            </p>
+        </div>
+
+        <div class="row g-4">
+            
+            <div class="col-xl-3 col-md-6" id="card-index1">
+                <div class="card dashboard-card bg-white card-plan" onclick="window.location.href='service-execution.html'">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="text-uppercase text-primary fw-bold small mb-1">Plan / Do</h6>
+                                <h5 class="card-title fw-bold mb-2">服務執行歷程管理</h5>
+                            </div>
+                            <div class="icon-wrapper bg-primary bg-opacity-10 text-primary">
+                                <i class="fas fa-upload"></i>
+                            </div>
+                        </div>
+                        <div class="guide-text">
+                            操作指引：<br>
+                            上傳訪視紀錄表、建立現場照片與基礎履歷資料。
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6" id="card-index2">
+                <div class="card dashboard-card bg-white card-check" onclick="window.location.href='admin-overview.html'">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="text-uppercase text-success fw-bold small mb-1">Check</h6>
+                                <h5 class="card-title fw-bold mb-2">管理者總覽</h5>
+                            </div>
+                            <div class="icon-wrapper bg-success bg-opacity-10 text-success">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                        </div>
+                        <div class="guide-text">
+                            操作指引：<br>
+                            查看各廠區績效統計、異常追蹤與執行成效報表。
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6" id="card-index5">
+                <div class="card dashboard-card bg-white card-act" onclick="window.location.href='improvement-ac.html'">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="text-uppercase text-danger fw-bold small mb-1">Act</h6>
+                                <h5 class="card-title fw-bold mb-2">評鑑改善行動</h5>
+                            </div>
+                            <div class="icon-wrapper bg-danger bg-opacity-10 text-danger">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                        </div>
+                        <div class="guide-text">
+                            操作指引：<br>
+                            依據評鑑結果進行證據補正與持續改善行動上傳。
+                        </div>
+                    </div>
+                </div>
+            </div>      
+            
+            <div class="col-xl-3 col-md-6" id="card-index3">
+                <div class="card dashboard-card bg-white card-eval" onclick="window.location.href='ai-assistant.html'">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="text-uppercase text-warning fw-bold small mb-1">Evaluation</h6>
+                                <h5 class="card-title fw-bold mb-2">評鑑支援助理</h5>
+                            </div>
+                            <div class="icon-wrapper bg-warning bg-opacity-10 text-warning">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                        </div>
+                        <div class="guide-text">
+                            操作指引：<br>
+                            執行評鑑指標自動檢核、產出合規性報表與建議。
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6" id="card-index7">
+                <div class="card dashboard-card bg-white card-data" onclick="window.location.href='master-data.html'">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="text-uppercase fw-bold small mb-1" style="color: #4f46e5;">Data Mgmt</h6>
+                                <h5 class="card-title fw-bold mb-2">基本資料建立</h5>
+                            </div>
+                            <div class="icon-wrapper bg-light" style="color: #4f46e5;">
+                                <i class="fas fa-database"></i>
+                            </div>
+                        </div>
+                        <div class="guide-text">
+                            操作指引：<br>
+                            建立客戶主檔、作業場所資料與合約期程設定。
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6" id="card-index6">
+                <div class="card dashboard-card bg-white card-admin" onclick="window.location.href='audit-logs.html'">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="text-uppercase text-dark fw-bold small mb-1">Audit Evidence</h6>
+                                <h5 class="card-title fw-bold mb-2">系統日誌與稽核證據</h5>
+                            </div>
+                            <div class="icon-wrapper bg-dark bg-opacity-10 text-dark">
+                                <i class="fas fa-clipboard-list"></i>
+                            </div>
+                        </div>
+                        <div class="guide-text">
+                            操作指引：<br>
+                            檢視系統操作日誌、管理稽核介面。
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6" id="card-users">
+                <div class="card dashboard-card bg-white card-account" onclick="window.location.href='admin_users.html'">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="text-uppercase fw-bold small mb-1" style="color: #0dcaf0;">Account Mgmt</h6>
+                                <h5 class="card-title fw-bold mb-2">帳號權限管理</h5>
+                            </div>
+                            <div class="icon-wrapper bg-info bg-opacity-10 text-info">
+                                <i class="fas fa-users-cog"></i>
+                            </div>
+                        </div>
+                        <div class="guide-text">
+                            操作指引：<br>
+                            管理系統使用者帳號、角色權限指派與帳號存續狀態設定。
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6" id="card-profile">
+                <div class="card dashboard-card bg-white card-profile" onclick="window.location.href='profile_settings.html'">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="text-uppercase fw-bold small mb-1" style="color: #6c757d;">Profile Settings</h6>
+                                <h5 class="card-title fw-bold mb-2">個人帳號密碼管理</h5>
+                            </div>
+                            <div class="icon-wrapper bg-secondary bg-opacity-10 text-secondary">
+                                <i class="fas fa-user-lock"></i>
+                            </div>
+                        </div>
+                        <div class="guide-text">
+                            操作指引：<br>
+                            修改個人登入帳號及密碼。
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6" id="card-index4">
+                <div class="card dashboard-card bg-white card-service" onclick="window.location.href='support-center.html'">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="text-uppercase fw-bold small mb-1" style="color: #e83e8c;">Service</h6>
+                                <h5 class="card-title fw-bold mb-2">線上客服中心</h5>
+                            </div>
+                            <div class="icon-wrapper bg-danger bg-opacity-10" style="color: #e83e8c;">
+                                <i class="fas fa-headset"></i>
+                            </div>
+                        </div>
+                        <div class="guide-text">
+                            操作指引：<br>
+                            提供即時諮詢管道與問題回報，協助解決系統操作問題。
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script src="config.js"></script>
+    
+    <script src="layout.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 權限與使用者資料已由 layout.js 處理 (checkAuth, renderNavbar)
+            // 這裡只需處理 Dashboard 特有的「卡片顯示邏輯 (RBAC)」
+
+            const userRole = sessionStorage.getItem(window.AppConfig.StorageKeys.USER_ROLE) || 'admin';
+
+            // 定義所有卡片 DOM 元素
+            const cards = {
+                plan: document.getElementById('card-index1'),    // Plan/Do
+                manager: document.getElementById('card-index2'), // Check
+                eval: document.getElementById('card-index3'),    // Evaluation
+                act: document.getElementById('card-index5'),     // Act
+                maint: document.getElementById('card-index6'),   // Audit
+                master: document.getElementById('card-index7'),  // Data
+                users: document.getElementById('card-users'),    // Users
+                profile: document.getElementById('card-profile'),// Profile
+                service: document.getElementById('card-index4')  // Service
+            };
+
+            // 輔助函式
+            const show = (el) => { if(el) el.style.display = 'block'; }
+            const hide = (el) => { if(el) el.style.display = 'none'; }
+
+            // 角色判斷邏輯
+            if (userRole === 'admin') {
+                // Admin: 全部可見
+                Object.values(cards).forEach(show);
+            }
+            else if (userRole === 'doc_control' || userRole === 'general') {
+                // 文管/一般: 隱藏 規劃、改善、使用者管理
+                hide(cards.plan);      // 1
+                show(cards.manager);   // 2
+                show(cards.eval);      // 3
+                hide(cards.act);       // 5 (文控不用改進)
+                show(cards.maint);     // 6
+                show(cards.master);    // 7
+                hide(cards.users);     // Users
+                show(cards.profile);   // Profile
+                show(cards.service);   // 4
+            }
+            else if (userRole === 'consultant') {
+                // 顧問: 只看 執行、改善、個人設定、客服
+                show(cards.plan);      // 1
+                hide(cards.manager);   // 2
+                hide(cards.eval);      // 3
+                show(cards.act);       // 5 (顧問需要填寫改善紀錄)
+                hide(cards.maint);     // 6
+                hide(cards.master);    // 7
+                hide(cards.users);     // Users
+                show(cards.profile);   // Profile
+                show(cards.service);   // 4
+            }
+        });
+    </script>
+</body>
+</html>
