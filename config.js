@@ -1,21 +1,40 @@
 // config.js
+// 目的：集中管理 全站共用設定 (資料庫、品牌資訊、頁面路徑)
+// 來源參考: [cite: 166, 167]
+
 const AppConfig = {
-    // 1. 資料庫連線設定 (全站共用)
+    // ------------------------------------------------
+    // 1. 資料庫連線設定 (Supabase)
+    // ------------------------------------------------
     Supabase: {
         URL: 'https://yhehfucgemxnfrdvpdhw.supabase.co',
-        KEY: 'sb_publishable_52emtU-9l-SDxcJTWVTPTA_Yu6qEogh', // 公開金鑰
-        BUCKET_NAME: 'staging' // 檔案上傳儲存桶 (僅內頁使用，但放這裡沒問題)
+        KEY: 'sb_publishable_52emtU-9l-SDxcJTWVTPTA_Yu6qEogh', // 若有安全疑慮建議後續改用環境變數
+        BUCKET_NAME: 'staging'
     },
 
-    // 2. 品牌與系統資訊 (Header/Footer 共用)
+    // ------------------------------------------------
+    // 2. 系統品牌資訊 (顯示於 Navbar / Footer)
+    // ------------------------------------------------
     System: {
-        NAME: 'OHACSS 職業健康評鑑與合規支援系統', // 網頁標題或 Navbar 文字
-        COMPANY_NAME: '可信智慧整合有限公司',      // Footer 公司名
-        TAX_ID: '42917004',                       // Footer 統編
-        SLOGAN: 'WesmartAI , Making Trust Transparent.' // Footer 口號
+        APP_NAME: 'OHACSS 職業健康評鑑與合規支援系統',
+        COMPANY_NAME: '可信智慧整合有限公司',
+        TAX_ID: '42917004',
+        SLOGAN: 'WesmartAI , Making Trust Transparent.'
     },
 
-    // 3. Session 鍵值 (避免打錯字)
+    // ------------------------------------------------
+    // 3. 核心頁面路徑對照 (選用，方便 JS 跳轉使用)
+    // ------------------------------------------------
+    Paths: {
+        LOGIN: 'login.html',
+        DASHBOARD: 'dashboard.html',
+        RESET_PASSWORD: 'reset_password.html',
+        INDEX: 'index.html'
+    },
+
+    // ------------------------------------------------
+    // 4. Storage Keys (避免打錯字)
+    // ------------------------------------------------
     StorageKeys: {
         USER_ID: 'currentUserId',
         USER_ROLE: 'currentUserRole',
@@ -23,5 +42,5 @@ const AppConfig = {
     }
 };
 
-// 掛載到 window 物件，確保全域可存取
+// 掛載到 Window 物件，確保全站可存取
 window.AppConfig = AppConfig;
