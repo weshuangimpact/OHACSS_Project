@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OHACSS 評鑑支援 AI 智慧助理</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <link href="style.css" rel="stylesheet">
+
+    <style>
+        :root { 
+            /* 定義本頁主題色：Evaluation 黃色 */
+            --theme-color: #ffc107; 
+        }
+
+        /* 覆寫字卡標題顏色 */
+        .instruction-title {
+            color: #856404; /* 黃褐色以增加對比度 */
+        }
+
+        /* 搜尋區塊 */
+        .search-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        /* 評鑑紀錄列樣式 */
+        .timeline-item {
+            border-left: 3px solid var(--theme-color);
+            padding-left: 20px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 0;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: var(--theme-color);
+        }
+
+        /* 預覽視窗樣式 */
+        .preview-pane {
+            background: #525659;
+            border-radius: 8px;
+            height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container main-content pb-5 mt-4">
+        
+        <div class="mb-4">
+            <h2 class="fw-bold text-dark mb-1">評鑑支援 AI 智慧助理</h2>
+            <p class="text-secondary">Evaluation 階段：AI 輔助評鑑缺失掃描與證據自動鏈結</p>
+        </div>
+
+        <div class="instruction-box">
+            <div class="instruction-title">
+                <i class="fas fa-robot me-2"></i>PDCA 設計理念：Evaluation (評鑑) —— AI 賦能的審查機制
+            </div>
+            <p class="mb-0 text-dark" style="line-height: 1.6;">
+                本模組作為系統的核心審核層，透過「案號」串連原始服務紀錄 (Evidence)，利用 AI 輔助技術自動檢核合規性缺失。評鑑人員在此留下的每一條審核紀錄與改善要求，都將成為證據鏈中不可或缺的節點，確保評鑑歷程透明、公正且可隨時重現。
+            </p>
+        </div>
+
+        <div class="search-container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text bg-white"><i class="fas fa-search text-warning"></i></span>
+                        <input type="text" id="searchInput" class="form-control" placeholder="請輸入欲評鑑之案件編號 (例如：SR-20260203-001)">
+                        <button class="btn btn-warning fw-bold px-4" onclick="searchEvidence()"><i class="fas fa-magic me-2"></i>啟動評鑑輔助</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="evaluationArea" style="display: none;">
+            <div class="row g-4">
+                <div class="col-lg-5">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-header bg-white py-3">
+                            <h5 class="fw-bold mb-0"><i class="fas fa-info-circle me-2 text-primary"></i>案件基準資訊</h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="mb-3">
+                                <label class="small text-muted fw-bold">企業名稱</label>
+                                <div class="fs-5 fw-bold" id="info-company">--</div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <label class="small text-muted fw-bold">服務日期</label>
+                                    <div id="info-date">--</div>
+                                </div>
+                                <div class="col-6">
+                                    <label class="small text-muted fw-bold">負責顧問</label>
+                                    <div id="info-staff">--</div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="mb-3">
+                                <label class="small text-muted fw-bold mb-2">執行項目清單</label>
+                                <div id="info-items" class="d-flex flex-wrap gap-2"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                            <h5 class="fw-bold mb-0"><i class="fas fa-clipboard-check me-2 text-warning"></i>評鑑紀錄 (Audit Trail)</h5>
+                            <button class="btn btn-sm btn-outline-primary" onclick="addReviewRow()"><i class="fas fa-plus me-1"></i>新增缺失</button>
+                        </div>
+                        <div class="card-body p-4">
+                            <div id="reviewHistory" class="mb-4">
+                                </div>
+                            
+                            <div class="p-3 bg-light rounded border border-warning">
+                                <h6 class="fw-bold mb-3">本次評鑑輸入</h6>
+                                <div class="mb-3">
+                                    <textarea id="reviewNote" class="form-control" rows="3" placeholder="請輸入評議意見或缺失補正要求..."></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="small fw-bold">補正期限 (若適用)</label>
+                                    <input type="date" id="reviewDeadline" class="form-control form-control-sm">
+                                </div>
+                                <button class="btn btn-warning w-100 fw-bold" onclick="saveReview()"><i class="fas fa-save me-2"></i>確認並更新評鑑狀態</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-7">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                            <h5 class="fw-bold mb-0"><i class="fas fa-file-pdf me-2 text-danger"></i>數位證據鏈預覽</h5>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-secondary" onclick="generateReport()"><i class="fas fa-print me-1"></i>產生評鑑總結報告</button>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <div id="fileList" class="list-group list-group-flush border-bottom" style="max-height: 200px; overflow-y: auto;">
+                                </div>
+                            <div id="pdfPreview" class="preview-pane">
+                                <div class="text-center">
+                                    <i class="fas fa-file-pdf fa-4x mb-3 opacity-25"></i>
+                                    <p>請點擊上方檔案進行預覽</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script src="config.js"></script>
+    
+    <script src="layout.js"></script>
+
+    <script>
+        // 初始化 Supabase (使用 Config) 
+        if (typeof window.AppConfig === 'undefined') {
+            console.error('Config not loaded!');
+        }
+
+        const supabaseClient = window.supabase.createClient(
+            window.AppConfig.Supabase.URL, 
+            window.AppConfig.Supabase.KEY
+        );
+
+        let currentEvidence = null;
+
+        // ==========================================
+        // 核心邏輯：調閱證據資料
+        // ==========================================
+        async function searchEvidence() {
+            const caseNumber = document.getElementById('searchInput').value.trim();
+            if (!caseNumber) return alert('請輸入案號');
+
+            const area = document.getElementById('evaluationArea');
+            
+            try {
+                // 讀取 Evidence 資料，關聯公司與顧問 [cite: 1]
+                const { data, error } = await supabaseClient
+                    .from('evidence')
+                    .select(`
+                        *,
+                        workplaces(companies(name)),
+                        medical_staff(name)
+                    `)
+                    .eq('case_number', caseNumber)
+                    .single();
+
+                if (error || !data) throw new Error('找不到此案號，請確認輸入是否正確。');
+
+                currentEvidence = data;
+                renderEvidenceInfo(data);
+                renderReviews(data.evaluation_reviews || []);
+                renderFiles(data);
+                
+                area.style.display = 'block';
+
+            } catch (err) {
+                alert(err.message);
+                area.style.display = 'none';
+            }
+        }
+
+        function renderEvidenceInfo(data) {
+            document.getElementById('info-company').innerText = data.workplaces?.companies?.name || '未知企業';
+            document.getElementById('info-date').innerText = data.visit_date || '未定';
+            document.getElementById('info-staff').innerText = data.medical_staff?.name || '未指派';
+
+            const itemsContainer = document.getElementById('info-items');
+            itemsContainer.innerHTML = '';
+            
+            // 處理 JSONB 欄位中的執行項目 [cite: 1]
+            if (data.execution_items && Array.isArray(data.execution_items)) {
+                data.execution_items.forEach(item => {
+                    const badge = document.createElement('span');
+                    badge.className = 'badge bg-info bg-opacity-10 text-info border border-info border-opacity-25';
+                    badge.innerText = item;
+                    itemsContainer.appendChild(badge);
+                });
+            }
+        }
+
+        // ==========================================
+        // 核心邏輯：評鑑紀錄管理
+        // ==========================================
+        function renderReviews(reviews) {
+            const container = document.getElementById('reviewHistory');
+            if (reviews.length === 0) {
+                container.innerHTML = '<p class="text-muted small">尚無評鑑紀錄</p>';
+                return;
+            }
+
+            container.innerHTML = reviews.map(r => `
+                <div class="timeline-item">
+                    <div class="d-flex justify-content-between align-items-start mb-1">
+                        <strong class="text-dark small">${r.reviewer || '管理者'}</strong>
+                        <span class="text-muted" style="font-size:0.75rem;">${r.date}</span>
+                    </div>
+                    <div class="small text-secondary">${r.note}</div>
+                    ${r.deadline ? `<div class="mt-1"><span class="badge bg-danger bg-opacity-10 text-danger small" style="font-size:0.7rem;">補正期限：${r.deadline}</span></div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        async function saveReview() {
+            const note = document.getElementById('reviewNote').value.trim();
+            const deadline = document.getElementById('reviewDeadline').value;
+            if (!note) return alert('請輸入評語');
+
+            const newReview = {
+                reviewer: sessionStorage.getItem(window.AppConfig.StorageKeys.USER_NAME) || '評鑑員',
+                date: new Date().toLocaleString('zh-TW'),
+                note: note,
+                deadline: deadline || null
+            };
+
+            const updatedReviews = [...(currentEvidence.evaluation_reviews || []), newReview];
+
+            try {
+                // 更新 Evidence 表中的評鑑紀錄與狀態 [cite: 1]
+                const { error } = await supabaseClient
+                    .from('evidence')
+                    .update({ 
+                        evaluation_reviews: updatedReviews,
+                        status: 'correction_requested', // 預設更新為待補正
+                        updated_at: new Date()
+                    })
+                    .eq('id', currentEvidence.id);
+
+                if (error) throw error;
+
+                alert('✅ 評鑑紀錄已更新，並同步通知顧問。');
+                currentEvidence.evaluation_reviews = updatedReviews;
+                renderReviews(updatedReviews);
+                document.getElementById('reviewNote').value = '';
+
+            } catch (err) {
+                alert('更新失敗: ' + err.message);
+            }
+        }
+
+        // ==========================================
+        // 核心邏輯：檔案預覽系統
+        // ==========================================
+        async function renderFiles(data) {
+            const container = document.getElementById('fileList');
+            container.innerHTML = '';
+
+            // 1. 加入主紀錄 PDF (若存在) [cite: 1]
+            if (data.file_url) {
+                addFileItem(container, '主執行紀錄 (PDF)', data.file_url, true);
+            }
+
+            // 2. 加入附件資料夾中的檔案 (若存在) [cite: 1]
+            if (data.attachment_folder_id) {
+                const { data: files } = await supabaseClient.storage.from('staging').list(data.attachment_folder_id);
+                if (files) {
+                    files.forEach(f => {
+                        addFileItem(container, f.name, `${data.attachment_folder_id}/${f.name}`, false);
+                    });
+                }
+            }
+        }
+
+        function addFileItem(container, name, path, isMain) {
+            const btn = document.createElement('button');
+            btn.className = 'list-group-item list-group-item-action py-2 small d-flex justify-content-between align-items-center';
+            btn.innerHTML = `
+                <span><i class="fas ${isMain ? 'fa-star text-warning' : 'fa-paperclip'} me-2"></i>${name}</span>
+                <i class="fas fa-chevron-right text-muted"></i>
+            `;
+            btn.onclick = () => previewFile(path);
+            container.appendChild(btn);
+        }
+
+        async function previewFile(path) {
+            const preview = document.getElementById('pdfPreview');
+            preview.innerHTML = '<div class="spinner-border text-light"></div>';
+
+            try {
+                // 產生簽名網址用於 iframe 預覽 [cite: 1]
+                const { data, error } = await supabaseClient.storage.from('staging').createSignedUrl(path, 3600);
+                if (error) throw error;
+
+                preview.innerHTML = `<iframe src="${data.signedUrl}#toolbar=0" width="100%" height="100%" frameborder="0"></iframe>`;
+            } catch (err) {
+                preview.innerHTML = `<div class="text-danger">檔案開啟失敗：${err.message}</div>`;
+            }
+        }
+
+        // ==========================================
+        // 功能功能：產生評鑑報告 (保留原始 Report 結構) [cite: 1]
+        // ==========================================
+        async function generateReport() {
+            if (!currentEvidence) return;
+            
+            const newWindow = window.open('', '_blank');
+            newWindow.document.write('<html><body>產生報告中...</body></html>');
+
+            try {
+                // 取得 Staging 數據補充細節
+                let stagingData = {};
+                if (currentEvidence.attachment_folder_id) {
+                    const { data } = await supabaseClient.from('service_record_staging').select('*').eq('id', currentEvidence.attachment_folder_id).single();
+                    if (data) stagingData = data;
+                }
+
+                const reportHtml = `
+                    <!DOCTYPE html>
+                    <html lang="zh-TW">
+                    <head>
+                        <meta charset="UTF-8">
+                        <title>評鑑總結報告 - ${currentEvidence.case_number}</title>
+                        <style>
+                            body { font-family: 'Microsoft JhengHei', sans-serif; padding: 40px; color: #333; }
+                            .header { border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 30px; text-align: center; }
+                            table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+                            th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+                            th { background-color: #f8f9fa; width: 150px; }
+                            .section-title { background: #eee; padding: 8px 15px; font-weight: bold; margin: 30px 0 15px; border-left: 5px solid #ffc107; }
+                            .footer { margin-top: 50px; text-align: right; font-size: 0.9rem; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="header">
+                            <h1>職業健康服務評鑑總結報告</h1>
+                            <p>案件編號：${currentEvidence.case_number}</p>
+                        </div>
+
+                        <div class="section-title">1. 基本資訊 (Base Info)</div>
+                        <table>
+                            <tr><th>企業名稱</th><td>${currentEvidence.workplaces?.companies?.name}</td><th>負責顧問</th><td>${currentEvidence.medical_staff?.name}</td></tr>
+                            <tr><th>服務日期</th><td>${currentEvidence.visit_date}</td><th>服務年度</th><td>${currentEvidence.service_year}</td></tr>
+                            <tr><th>服務類型</th><td colspan="3">${stagingData.service_type || '一般紀錄'}</td></tr>
+                        </table>
+
+                        <div class="section-title">2. 評鑑交互歷程 (Audit Trail)</div>
+                        <table>
+                            <thead><tr><th style="width:200px">時間</th><th>評鑑員</th><th>評議意見與缺失要求</th></tr></thead>
+                            <tbody>
+                                ${(currentEvidence.evaluation_reviews || []).map(r => `
+                                    <tr><td>${r.date}</td><td>${r.reviewer}</td><td>${r.note}</td></tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+
+                        <div class="footer">
+                            報告產生日期：${new Date().toLocaleString('zh-TW')}<br>
+                            本報告由 OHACSS AI 助理自動生成
+                        </div>
+                    </body>
+                    </html>
+                `;
+
+                newWindow.document.open();
+                newWindow.document.write(reportHtml);
+                newWindow.document.close();
+
+            } catch (err) {
+                newWindow.document.body.innerHTML = '報告產生失敗：' + err.message;
+            }
+        }
+    </script>
+</body>
+</html>
