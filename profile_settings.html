@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>重設密碼 | OHACSS</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <link href="style.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* 定義本頁主題色：灰色 (對應 Profile Settings) */
+            --theme-color: #6c757d;
+        }
+
+        /* 覆寫字卡與元件的主題色 */
+        .instruction-title {
+            color: var(--theme-color);
+        }
+        
+        /* 重設密碼卡片設定 */
+        .reset-card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            background-color: #fff; 
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .card-header {
+            background-color: var(--theme-color);
+            color: white; 
+            padding: 1.5rem; 
+            text-align: center;
+            border-bottom: none;
+        }
+
+        .form-control:focus { 
+            border-color: var(--theme-color);
+            box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25); 
+        }
+        
+        /* 狀態顯示區塊 */
+        #auth-status {
+            font-size: 0.9rem;
+            margin-bottom: 15px; 
+            padding: 10px; 
+            border-radius: 5px; 
+            text-align: center;
+        }
+        .status-waiting { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+        .status-ok { background-color: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; }
+        .status-error { background-color: #f8d7da; color: #842029; border: 1px solid #f5c6cb; }
+        
+        /* 按鈕樣式 */
+        .btn-theme {
+            background-color: var(--theme-color);
+            border-color: var(--theme-color);
+            color: white;
+            font-weight: bold;
+        }
+        .btn-theme:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container-fluid px-4 mt-4 pb-5 main-content">
+        
+        <div class="mb-4">
+            <h2 class="fw-bold text-dark mb-1">個人密碼管理</h2>
+            <p class="text-secondary mb-0">Profile Settings 階段：帳號安全與登入憑證維護</p>
+        </div>
+
+        <div class="instruction-box">
+            <div class="instruction-title">
+                <i class="fas fa-user-shield me-2"></i>5W1H 設計理念：Security (安全)
+            </div>
+            <p class="mb-0 text-dark" style="line-height: 1.6;">
+                透過嚴謹的身分驗證機制(Who)，確保只有授權使用者能在特定時間(When)修改其登入憑證(What)，以落實系統存取控制與資料安全政策(Why)。
+            </p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="card reset-card">
+                    <div class="card-header">
+                        <h5 class="mb-0 fw-bold"><i class="fas fa-key me-2"></i>重設/修改密碼</h5>
+                    </div>
+                    <div class="card-body p-4 p-md-5">
+                        
+                        <div id="auth-status" class="status-waiting">
+                            <i class="fas fa-spinner fa-spin me-2"></i>正在驗證身分權限...
+                        </div>
+
+                        <form id="resetForm">
+                            <div class="mb-3">
+                                <label class="form-label text-dark fw-bold small">新密碼</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white text-muted border-end-0"><i class="fas fa-lock"></i></span>
+                                    <input type="password" class="form-control border-start-0 ps-0" id="new-password" placeholder="請輸入新密碼 (至少6碼)" required minlength="6" disabled>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="form-label text-dark fw-bold small">確認新密碼</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white text-muted border-end-0"><i class="fas fa-check-circle"></i></span>
+                                    <input type="password" class="form-control border-start-0 ps-0" id="confirm-password" placeholder="請再次輸入新密碼" required minlength="6" disabled>
+                                </div>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" id="submit-btn" class="btn btn-theme py-2" disabled>
+                                    <i class="fas fa-save me-2"></i>確認修改
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="config.js"></script>
+    
+    <script src="layout.js"></script>
+
+    <script>
+        // 初始化 Supabase (使用 Config)
+        if (typeof window.AppConfig === 'undefined') {
+            console.error('Config not loaded!');
+        }
+
+        const supabaseClient = window.supabase.createClient(
+            window.AppConfig.Supabase.URL, 
+            window.AppConfig.Supabase.KEY
+        );
+
+        const statusEl = document.getElementById('auth-status');
+        const submitBtn = document.getElementById('submit-btn');
+        const input1 = document.getElementById('new-password');
+        const input2 = document.getElementById('confirm-password');
+
+        // 注意：Layout.js 的 checkAuth() 已確保了 sessionStorage 中有 UserID。
+        // 但為了取得更詳細的 Auth 資訊 (如 email) 用於顯示，這裡保留 onAuthStateChange 邏輯。
+        // 當使用者已登入時，此事件會立即觸發。
+
+        // 1. 嚴格檢查身分：只有在確認 Session 存在後，才解鎖表單
+        supabaseClient.auth.onAuthStateChange(async (event, session) => {
+            console.log('Auth Event:', event);
+            
+            if (session) {
+                // 成功抓到使用者
+                statusEl.className = 'status-ok';
+                statusEl.innerHTML = `<i class="fas fa-user-check me-2"></i>正在為 <strong>${session.user.email}</strong> 設定密碼`;
+                
+                // 解鎖表單
+                submitBtn.disabled = false;
+                input1.disabled = false;
+                input2.disabled = false;
+            } else {
+                // 雖然 layout.js 會擋未登入者，但雙重保險 (或處理 Session 過期)
+                setTimeout(async () => {
+                    const { data } = await supabaseClient.auth.getSession();
+                    if (!data.session) {
+                        statusEl.className = 'status-error';
+                        statusEl.innerHTML = `<i class="fas fa-exclamation-triangle me-2"></i>連結已失效或過期，請重新登入。`;
+                        // 保持鎖定
+                    }
+                }, 1000);
+            }
+        });
+
+        // 2. 表單送出
+        document.getElementById('resetForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const p1 = input1.value;
+            const p2 = input2.value;
+
+            if (p1 !== p2) return alert('❌ 兩次密碼輸入不一致');
+
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>更新中...';
+
+            try {
+                const { error } = await supabaseClient.auth.updateUser({ password: p1 });
+                if (error) throw error;
+
+                alert('✅ 密碼更新成功！\n為確保安全，系統將自動登出，請使用「新密碼」重新登入。');
+                
+                // 3. 徹底清除並登出
+                await supabaseClient.auth.signOut();
+                localStorage.clear();
+                sessionStorage.clear();
+                
+                // 跳轉回登入頁 (使用 Config 路徑)
+                window.location.href = window.AppConfig.Paths.LOGIN || 'login.html';
+
+            } catch (err) {
+                console.error(err);
+                alert('❌ 更新失敗: ' + err.message);
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        });
+    </script>
+</body>
+</html>
