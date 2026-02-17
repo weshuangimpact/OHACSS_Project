@@ -44,6 +44,7 @@
         
         .card-phone { border-left-color: #0d6efd; }
         .card-email { border-left-color: #ffc107; }
+        .card-iso   { border-left-color: #198754; } /* ISO 綠色 */
 
         .icon-circle {
             width: 50px;
@@ -57,6 +58,18 @@
         
         /* 導引卡片文字顏色 */
         .text-pink { color: var(--theme-color); }
+        
+        /* ISO 下載連結樣式 */
+        .iso-download-link {
+            text-decoration: none;
+            color: #333;
+            display: block;
+            padding: 8px 0;
+            border-bottom: 1px dashed #eee;
+            transition: color 0.2s;
+        }
+        .iso-download-link:last-child { border-bottom: none; }
+        .iso-download-link:hover { color: #198754; }
     </style>
 </head>
 <body>
@@ -125,6 +138,22 @@
                         <div style="overflow: hidden;">
                             <h6 class="fw-bold mb-1">問題回報信箱</h6>
                             <small class="text-muted text-truncate d-block">wesmartaitaiwan@gmail.com</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-info-card card-iso">
+                    <div class="d-flex align-items-start">
+                        <div class="icon-circle text-white bg-success">
+                            <i class="fas fa-file-contract"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="fw-bold mb-2">ISO 45001 驗證文件</h6>
+                            <div class="small">
+                                <a href="#" class="iso-download-link"><i class="fas fa-download me-2 text-success"></i>ISO 45001 證書影本.pdf</a>
+                                <a href="#" class="iso-download-link"><i class="fas fa-download me-2 text-success"></i>職業安全衛生手冊.pdf</a>
+                                <a href="#" class="iso-download-link"><i class="fas fa-download me-2 text-success"></i>程序文件清單.xlsx</a>
+                            </div>
                         </div>
                     </div>
                 </div>
