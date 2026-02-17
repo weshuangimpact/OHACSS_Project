@@ -26,7 +26,7 @@ const AppConfig = {
     // 3. 核心頁面路徑對照 (選用，方便 JS 跳轉使用)
     // ------------------------------------------------
     Paths: {
-        LOGIN: 'login.html',
+        LOGIN: 'index.html',
         DASHBOARD: 'dashboard.html',
         RESET_PASSWORD: 'reset_password.html',
         INDEX: 'index.html'
