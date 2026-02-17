@@ -1,153 +1,172 @@
-# OHACSS 職業健康評鑑與合規支援系統 - 開發者維護手冊
+# OHACSS 職業健康評鑑與合規支援系統 - System Governance Whitepaper
 
-**版本**: 1.0.0
+**文件版本**: 1.3.0
+
+**適用場景**: 企業資安審查、ISO 稽核驗證、政府標案驗收
 
 **更新日期**: 2026-02-17
 
-**技術架構**: Vanilla JS (原生 JavaScript) + Bootstrap 5 + Supabase (BaaS)
+---
+
+## 1. 執行摘要 (Executive Summary)
+
+OHACSS 是一個專為職業安全衛生 (OH&S) 設計的企業級 SaaS 解決方案。本系統採用 **PDCA (Plan-Do-Check-Act)** 閉環管理架構，核心目標是協助企業落實 **ISO 45001:2018** 標準。技術架構遵循 **Zero-Trust (零信任)** 與 **Privacy by Design (隱私設計)** 原則，透過 Serverless 架構與 RLS (Row Level Security) 確保數據的機密性、完整性與可用性。
 
 ---
 
-## 1. 專案概述 (Project Overview)
+## 2. 合規性與標準對照 (Compliance & Standards Alignment)
 
-本專案採用 **MPA (Multi-Page Application)** 架構，所有頁面皆為獨立的 HTML 檔案。為了降低維護成本並支援未來的 OEM (貼牌) 需求，系統已將 **共用設定**、**版型邏輯** 與 **視覺樣式** 進行了模組化拆分。
+本系統之模組設計直接對應 **ISO 45001:2018 職業安全衛生管理系統** 之條文要求，可作為企業通過 ISO 驗證之數位佐證工具。
 
-### 核心設計原則
+### 2.1 ISO 45001 對照表 (Mapping Table)
 
-* **零依賴編譯**：無需 Webpack/Vite，直接開啟 HTML 即可運行。
-* **設定集中化**：所有 API Key 與品牌資訊皆由 `config.js` 管理。
-* **版型自動化 (僅內頁)**：內頁的 Header/Footer 由 JS 動態生成，避免重複代碼。
-
----
-
-## 2. 檔案結構 (File Structure)
-
-本專案採用 **扁平化結構 (Flat Structure)**，核心檔案直接位於根目錄，方便引用與維護。
-
-```text
-/ (根目錄)
-├── index.html              # [入口] 系統大門 (僅負責邏輯判斷，自動跳轉 Dashboard 或 Login)
-├── config.js               # [核心] 全站共用設定檔 (資料庫、品牌資訊)
-├── layout.js               # [核心] 內頁版型生成器 (Navbar, Footer, 權限檢查)
-├── style.css               # [核心] 全站視覺樣式表 (CSS Variables)
-│
-├── login.html              # [公開] 登入頁 (獨立架構)
-├── reset_password.html     # [公開] 重設密碼頁 (獨立架構)
-│
-├── dashboard.html          # [內頁] 儀表板 (系統首頁)
-├── service-execution.html  # [內頁] 服務執行歷程 (原 index1)
-├── admin-overview.html     # [內頁] 管理者總覽 (原 index2)
-├── ai-assistant.html       # [內頁] AI 評鑑助理 (原 index3)
-├── support-center.html     # [內頁] 線上客服中心 (原 index4)
-├── improvement-ac.html     # [內頁] 評鑑改善專區 (原 index5)
-├── audit-logs.html         # [內頁] 系統日誌 (原 index6)
-├── master-data.html        # [內頁] 基本資料建立 (原 index7)
-├── admin_users.html        # [內頁] 帳號權限管理
-└── profile_settings.html   # [內頁] 個人密碼管理
-
-```
-
----
-
-## 3. 關鍵維護架構 (Critical Architecture)
-
-**⚠️ 請特別注意：本系統分為「公開頁面」與「系統內頁」兩套邏輯。**
-
-為了防止「權限檢查無限迴圈」並優化載入效能，這兩類頁面的引用策略不同：
-
-### 🅰️ 類別一：公開頁面 (Public Pages)
-
-* **檔案**：`login.html`, `reset_password.html`
-* **特性**：
-1. **不引用 `layout.js**`：避免觸發 `checkAuth()` 導致未登入使用者被踢出。
-2. **手動維護 Header/Footer**：這兩頁的 `<nav>` 與 `<footer>` HTML 標籤是直接寫在檔案內的。
-3. **引用 `config.js**`：讀取 Supabase 連線資訊。
-4. **引用 `style.css**`：保持視覺風格與內頁一致。
-
-
-
-> **維護注意**：若要修改登入頁的 Logo 或 Footer 版權文字，請**直接編輯這兩個 HTML 檔案**，改 `config.js` 的設定不會影響這兩頁的靜態文字。
-
-### 🅱️ 類別二：系統內頁 (System Pages)
-
-* **檔案**：`dashboard.html`, `service-execution.html` 等所有功能頁。
-* **特性**：
-1. **引用 `layout.js**`：系統載入時會**自動生成** Navbar (含登出鈕、使用者名稱) 與 Footer。
-2. **自動權限檢查**：`layout.js` 會自動檢查 `sessionStorage`，若無登入資訊會強制跳轉回 Login。
-3. **HTML 簡潔化**：原始碼中**不包含** `<nav>` 與 `<footer>` 標籤。
-
-
-
-> **維護注意**：若要修改內頁的 Logo、選單項目或 Footer 文字，請**修改 `layout.js` 與 `config.js**`，全站內頁會同步更新。
-
----
-
-## 4. 設定與客製化 (Configuration & OEM)
-
-### 4.1 修改資料庫連線 & 公司資訊
-
-開啟 `config.js` 進行編輯：
-
-```javascript
-const AppConfig = {
-    Supabase: {
-        URL: 'https://your-project.supabase.co', // 修改資料庫網址
-        KEY: 'your-anon-key'                     // 修改 API Key
-    },
-    System: {
-        APP_NAME: 'OHACSS 職業健康系統',          // 修改 Navbar 系統名稱
-        COMPANY_NAME: '某某科技有限公司',           // 修改 Footer 公司名
-        TAX_ID: '00000000'                       // 修改統編
-    }
-};
-
-```
-
-### 4.2 修改視覺主題色 (Theming)
-
-開啟 `style.css`，修改 `:root` 變數即可一鍵換色：
-
-```css
-:root {
-    --brand-dark: #202124;      /* Header/Footer 背景色 */
-    --brand-primary: #0d6efd;   /* 主要按鈕顏色 */
-    
-    /* 系統語意色 (PDCA) - 若需調整各階段代表色 */
-    --sys-plan: #0d6efd;   /* Plan (藍) */
-    --sys-do:   #198754;   /* Do (綠) */
-    /* ... */
-}
-
-```
-
----
-
-## 5. 頁面功能對照表 (Page Mapping)
-
-為方便對照舊版需求，以下列出新舊檔名對應：
-
-| 新檔名 (Semantic Name) | 舊檔名 (Original) | 功能模組 | 代表色 |
+| ISO 45001 條文 | PDCA 階段 | 對應系統模組 | 功能實證 (Evidence) |
 | --- | --- | --- | --- |
-| `service-execution.html` | index1 | 服務執行 (Plan/Do) | 🔵 Blue |
-| `admin-overview.html` | index2 | 管理者總覽 (Check) | 🟢 Green |
-| `ai-assistant.html` | index3 | AI 評鑑助理 (Eval) | 🟡 Yellow |
-| `support-center.html` | index4 | 線上客服 | 🩷 Pink |
-| `improvement-ac.html` | index5 | 改善專區 (Act) | 🔴 Red |
-| `audit-logs.html` | index6 | 稽核日誌 (Audit) | ⚫ Black |
-| `master-data.html` | index7 | 基本資料 (5W1H) | 🟣 Purple |
+| **5.4 工作者諮商與參與** | **Support** | `support-center.html`<br>
+
+<br>(線上客服中心) | 提供工作者(使用者)回報問題、諮詢職安衛事項的雙向溝通管道與紀錄。 |
+| **6.1 應對風險的措施** | **Plan** | `service-execution.html`<br>
+
+<br>(Step 1: 規劃) | 系統自動帶出年度合約規劃之服務場次，確保法規合規性風險被納入排程。 |
+| **8.1 運作規劃與管制** | **Do** | `service-execution.html`<br>
+
+<br>(Step 2: 執行) | 數位化執行紀錄表 (Checklist A-Q)，強制記錄作業環境監測與健康服務內容。 |
+| **9.1 監控、量測與分析** | **Check** | `admin-overview.html`<br>
+
+<br>(管理者總覽) | 針對執行紀錄進行合規性審查，並生成具時戳之不可竄改 PDF 報告。 |
+| **9.2 內部稽核** | **Audit** | `audit-logs.html`<br>
+
+<br>(系統日誌) | 詳實記錄所有資料異動軌跡 (Who/When/What)，符合稽核軌跡 (Audit Trail) 要求。 |
+| **10.2 不符合事項與矯正** | **Act** | `improvement-ac.html`<br>
+
+<br>(評鑑改善專區) | 針對審查缺失自動立案，追蹤改善行動直至結案，形成持續改善迴圈。 |
+
+### 2.2 資料隱私與保護 (GDPR / PDPA)
+
+* **Data Minimization**: 系統僅蒐集執行業務必要之欄位，醫護人員個資採最小化原則儲存。
+* **Right to be Forgotten**: 支援邏輯刪除 (`is_active=false`) 與物理刪除 (需 Admin 核決)，以符合個資法刪除請求權。
 
 ---
 
-## 6. 部署說明 (Deployment)
+## 3. 安全防禦與存取控制 (Security & Access Control)
 
-本專案為純靜態網站，可部署於任何靜態網頁伺服器：
+### 3.1 權限矩陣 (RBAC Matrix)
 
-1. **GitHub Pages / Vercel / Netlify**：直接上傳所有檔案即可。
-2. **Apache / Nginx**：將檔案放入 Web Root。
-3. **AWS S3 / GCP Storage**：設定為靜態網站託管模式。
+本系統採用 **Role-Based Access Control**，權限由後端 RLS Policy 強制執行，前端僅做 UI 隱藏。
 
-**注意**：請確保 `config.js` 中的 `Supabase URL` 與 `KEY` 在正式環境中是正確的。雖然是前端金鑰 (Anon Key)，但仍建議在 Supabase 後台設定 RLS (Row Level Security) 以確保資料安全。
+| 功能模組 | Admin (管理員) | Consultant (顧問) | General (文管/一般) |
+| --- | --- | --- | --- |
+| **帳號管理** | ✅ CRUD | ❌ 禁止 | ❌ 禁止 |
+| **服務紀錄 (Plan/Do)** | ✅ 讀/寫/審 | ✅ 讀/寫 (僅限本人) | 👁️ 唯讀 |
+| **審核核決 (Check)** | ✅ 核決/退回 | 👁️ 唯讀 (僅限本人) | 👁️ 唯讀 |
+| **改善行動 (Act)** | ✅ 讀/寫 | ✅ 讀/寫 (僅限本人) | 👁️ 唯讀 |
+| **系統日誌 (Audit)** | ✅ 完整檢視 | ❌ 禁止 | ❌ 禁止 |
+
+### 3.2 威脅防禦策略 (Threat Mitigation)
+
+* **XSS 防護**:
+* 嚴格限制 `innerHTML` 的使用，動態內容渲染優先使用 `textContent`。
+* 計畫導入 **CSP (Content Security Policy)** Header，限制腳本來源僅限本網域與 Supabase。
+
+
+* **Session 安全**:
+* Access Token 預設存於 `localStorage` (Supabase SDK 行為)。
+* **企業版選項**: 可配置為 `HttpOnly Cookie` 模式 (需搭配 Supabase Auth Helpers)。
+
+
+* **API 安全**: 全面啟用 Rate Limiting，防止暴力破解與 DDoS 攻擊。
 
 ---
 
-*Document generated by AI Assistant for OHACSS Dev Team.*
+## 4. 營運韌性與災難復原 (Resilience & DR)
+
+### 4.1 備份策略 (Backup Strategy)
+
+系統依賴 Supabase (PostgreSQL) 的企業級備份機制：
+
+* **PITR (Point-in-Time Recovery)**: 支援回復至過去 7 天內任意時間點的資料狀態。
+* **Daily Backups**: 每日自動完整備份，保留 30 天。
+* **Geo-Redundancy**: 資料庫儲存於雲端高可用區域 (Availability Zones)。
+
+### 4.2 復原目標 (Recovery Objectives)
+
+* **RPO (Recovery Point Objective)**: < 1 分鐘 (基於 WAL Logs)。
+* **RTO (Recovery Time Objective)**: < 4 小時 (視資料量大小而定)。
+
+### 4.3 錯誤處理分級 (Error Handling)
+
+| 等級 | 定義 | 響應策略 | 通知機制 |
+| --- | --- | --- | --- |
+| **L1 (Critical)** | 系統停機、資料遺失風險 | 切換至維護頁面 | SMS/Email 通知維運團隊 |
+| **L2 (Major)** | 核心功能 (如登入、上傳) 失敗 | UI 阻斷並引導重試 | 寫入 Error Log |
+| **L3 (Minor)** | 非核心顯示錯誤 | UI 靜默處理 (降級顯示) | Console Log |
+
+---
+
+## 5. 系統架構與流程 (Architecture & Flow)
+
+### 5.1 核心驗證流程 (Auth Sequence)
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Layout (Gatekeeper)
+    participant Supabase (Auth)
+    participant DB (RLS)
+
+    User->>Layout: Access Protected Page
+    Layout->>Layout: Check Session Validity
+    
+    alt Session Invalid
+        Layout-->>User: Redirect to Login
+    else Session Valid
+        Layout->>Supabase: Request Data (Bearer Token)
+        Supabase->>DB: Query with RLS Context
+        
+        alt Token Expired
+            Supabase->>Supabase: Auto Refresh Token
+            alt Refresh Success
+                DB-->>Supabase: Return Data
+                Supabase-->>User: Render Page
+            else Refresh Fail
+                Supabase-->>User: 401 Unauthorized
+                User->>User: Force Logout
+            end
+        end
+    end
+
+```
+
+### 5.2 數據治理 (Data Governance)
+
+* **Audit Trail**: 透過 Database Trigger 強制記錄所有 `INSERT/UPDATE/DELETE` 操作至 `audit_logs` 表，包含 `old_record` 與 `new_record` 快照。
+* **Schema Migration**: 禁止直接修改 Production DB。所有變更需透過 Migration SQL 腳本執行，並納入版控。
+
+---
+
+## 6. 開發與部署規範 (Development & Deployment)
+
+### 6.1 環境需求
+
+* **Local**: 靜態 Web Server (Live Server / Python SimpleHTTPServer)。
+* **Production**: 支援 HTTPS 的靜態託管服務 (Vercel / Netlify / AWS S3 + CloudFront)。
+
+### 6.2 部署檢查清單 (Go-Live Checklist)
+
+* [ ] **ISO Compliance**: 確認 `support-center.html` 與 `improvement-ac.html` 功能運作正常，以符合 ISO 45001 條文 5.4 與 10.2。
+* [ ] **Security**: 確認 `config.js` 指向正式環境，且無測試用 Service Role Key 殘留。
+* [ ] **RLS Validation**: 執行 `admin` 與 `consultant` 帳號的交叉存取測試，確保資料隔離生效。
+* [ ] **Audit Verification**: 執行一筆資料修改，確認 `audit_logs` 表中有新增對應紀錄。
+
+---
+
+## 7. 未來擴充路線 (Roadmap)
+
+1. **ISO 報表中心**: 自動生成符合勞檢要求的「職安衛績效分析報告」。
+2. **AI 稽核預警**: 利用 AI 分析 `audit_logs`，主動偵測異常操作行為 (Anomaly Detection)。
+3. **多因子驗證 (MFA)**: 針對 Admin 帳號強制啟用 TOTP 驗證，提升存取安全。
+
+---
+
+*Confidential & Proprietary - OHACSS Governance Team.*
+*Aligned with ISO 45001:2018 & GDPR Standards.*
