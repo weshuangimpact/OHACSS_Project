@@ -1,6 +1,6 @@
 # OHACSS 職業健康評鑑與合規支援系統 - System Governance Whitepaper
 
-**文件版本**: 1.3.0
+**文件版本**: 1.4.0
 
 **適用場景**: 企業資安審查、ISO 稽核驗證、政府標案驗收
 
@@ -10,7 +10,7 @@
 
 ## 1. 執行摘要 (Executive Summary)
 
-OHACSS 是一個專為職業安全衛生 (OH&S) 設計的企業級 SaaS 解決方案。本系統採用 **PDCA (Plan-Do-Check-Act)** 閉環管理架構，核心目標是協助企業落實 **ISO 45001:2018** 標準。技術架構遵循 **Zero-Trust (零信任)** 與 **Privacy by Design (隱私設計)** 原則，透過 Serverless 架構與 RLS (Row Level Security) 確保數據的機密性、完整性與可用性。
+OHACSS 是一個專為職業安全衛生 (OH&S) 設計的企業級 SaaS 解決方案。本系統採用 **PDCA (Plan-Do-Check-Act)** 閉環管理架構，核心目標是協助企業落實 **ISO 45001:2018** 標準。技術架構遵循 **Zero-Trust (零信任)** 與 **Privacy by Design (隱私設計)** 原則，透過 Serverless 架構、RLS (Row Level Security) 與嚴謹的資料庫 Schema 設計，確保數據的機密性、完整性與可用性。
 
 ---
 
@@ -64,16 +64,8 @@ OHACSS 是一個專為職業安全衛生 (OH&S) 設計的企業級 SaaS 解決�
 
 ### 3.2 威脅防禦策略 (Threat Mitigation)
 
-* **XSS 防護**:
-* 嚴格限制 `innerHTML` 的使用，動態內容渲染優先使用 `textContent`。
-* 計畫導入 **CSP (Content Security Policy)** Header，限制腳本來源僅限本網域與 Supabase。
-
-
-* **Session 安全**:
-* Access Token 預設存於 `localStorage` (Supabase SDK 行為)。
-* **企業版選項**: 可配置為 `HttpOnly Cookie` 模式 (需搭配 Supabase Auth Helpers)。
-
-
+* **XSS 防護**: 嚴格限制 `innerHTML` 的使用，動態內容渲染優先使用 `textContent`。計畫導入 **CSP** Header。
+* **Session 安全**: Access Token 預設存於 `localStorage`。企業版可選配 `HttpOnly Cookie` 模式。
 * **API 安全**: 全面啟用 Rate Limiting，防止暴力破解與 DDoS 攻擊。
 
 ---
@@ -103,9 +95,55 @@ OHACSS 是一個專為職業安全衛生 (OH&S) 設計的企業級 SaaS 解決�
 
 ---
 
-## 5. 系統架構與流程 (Architecture & Flow)
+## 5. 系統架構與數據治理 (Architecture & Data Governance)
 
-### 5.1 核心驗證流程 (Auth Sequence)
+本系統採用 **PostgreSQL** 關聯式資料庫，透過嚴謹的 Schema 設計來落實 ISO 45001 的管理循環。系統將「作業資料 (Operational Data)」與「稽核證據 (Evidence)」在物理層面進行隔離，確保數據的不可否認性。
+
+### 5.1 實體關聯圖 (ER Diagram)
+
+```mermaid
+erDiagram
+    %% Core Entities
+    COMPANIES ||--o{ WORKPLACES : owns
+    WORKPLACES ||--o{ SERVICE_RECORDS : plans
+    MEDICAL_STAFF ||--o{ SERVICE_RECORDS : executes
+
+    %% Workflow: Plan -> Do -> Check -> Act
+    SERVICE_RECORDS ||--o{ SERVICE_RECORD_STAGING : "1. Do (Draft)"
+    SERVICE_RECORD_STAGING ||--o{ EVIDENCE : "2. Check (Finalize)"
+    
+    %% Audit Layer
+    AUTH_USERS ||--o{ PROFILES : "1:1 Extension"
+    AUTH_USERS ||--o{ AUDIT_LOGS : "triggers"
+    
+    %% Key Tables Overview
+    COMPANIES { uuid id PK "Tax ID, Status" }
+    SERVICE_RECORDS { uuid id PK "Plan Date, Year" }
+    SERVICE_RECORD_STAGING { uuid id PK "Draft Data, Status" }
+    EVIDENCE { uuid id PK "Official PDF, Immutable Data" }
+    AUDIT_LOGS { uuid id PK "Who, When, What, Details" }
+
+```
+
+### 5.2 資料字典與合規對照 (Data Dictionary)
+
+| 資料表名稱 | 職責與合規意義 | ISO 45001 對應 |
+| --- | --- | --- |
+| **`companies`** | **客戶主檔**。記錄合約效期與服務狀態，作為規劃服務的基礎。 | 組織背景 (Context) |
+| **`workplaces`** | **作業場所**。定義危害類型與勞工人數，用於風險分級管理。 | 危害辨識 (6.1.2) |
+| **`medical_staff`** | **醫護人員名單**。管理證照與聘僱狀態，確保服務提供者具備資格。 | 資源與能力 (7.2) |
+| **`service_records`** | **母案/年度計畫 (Plan)**。預先建立的服務場次空殼，代表「應執行的義務」。 | 規劃 (6.1) |
+| **`service_record_staging`** | **暫存/審核區 (Do)**。顧問上傳原始紀錄的緩衝區。資料在此可被修改，但需經過審核流程。 | 運作管制 (8.1) |
+| **`evidence`** | **正式證據庫 (Check/Act)**。經核決後的最終狀態。**資料在此為唯讀 (Read-only)**，任何異動皆需透過「評鑑流程」進行。 | 績效評估 (9.1) |
+| **`audit_logs`** | **系統稽核日誌**。由 DB Trigger 自動寫入，記錄所有 Table 的增刪改操作 (Who/When/What)。 | 內部稽核 (9.2) |
+
+### 5.3 關鍵設計決策 (Key Design Decisions)
+
+1. **JSONB 的使用**：在 `evidence` 表中使用 `assessment_logs` 與 `act_improvements` 儲存 JSONB 陣列，保留完整的對話與修改歷程 (History)，而非僅覆蓋最新狀態，符合 ISO 對於「持續改善」軌跡的要求。
+2. **狀態機設計 (State Machine)**：`status` 欄位 (`pending` -> `approved` -> `closed`) 嚴格控制資料流向，防止未經審核的資料進入正式報表。
+3. **邏輯刪除 (Soft Delete)**：核心表使用 `is_active` 欄位代替物理刪除，確保歷史關聯資料不會因人員離職或合約終止而遺失。
+
+### 5.4 核心驗證流程 (Auth Sequence)
 
 ```mermaid
 sequenceDiagram
@@ -136,11 +174,6 @@ sequenceDiagram
     end
 
 ```
-
-### 5.2 數據治理 (Data Governance)
-
-* **Audit Trail**: 透過 Database Trigger 強制記錄所有 `INSERT/UPDATE/DELETE` 操作至 `audit_logs` 表，包含 `old_record` 與 `new_record` 快照。
-* **Schema Migration**: 禁止直接修改 Production DB。所有變更需透過 Migration SQL 腳本執行，並納入版控。
 
 ---
 
