@@ -54,8 +54,8 @@
     <div class="main-content">
         <div class="card login-card">
             <div class="card-header">
-                <h3 class="mb-0"><i class="fas fa-shield-alt me-2"></i>OHACSS</h3>
-                <small class="opacity-75"></small>
+                <h3 class="mb-1"><i class="fas fa-shield-alt me-2"></i>OHCASS</h3>
+                <small class="opacity-75 d-block">職業健康評鑑與合規支援系統</small>
             </div>
             <div class="card-body p-4">
                 <div id="error-msg" class="alert alert-danger py-2 small" role="alert" style="display: none;">
@@ -135,7 +135,7 @@
 
         // 2. 頁首時鐘與日期邏輯 & 記住我初始化
         document.addEventListener('DOMContentLoaded', function() {
-            // [新增] 檢查 LocalStorage 是否有記住的 Email
+            // 檢查 LocalStorage 是否有記住的 Email
             const savedEmail = localStorage.getItem('savedEmail');
             if (savedEmail) {
                 document.getElementById('email').value = savedEmail;
@@ -168,7 +168,7 @@
 
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
-            const rememberMe = document.getElementById('rememberMe').checked; // [新增] 讀取 checkbox 狀態
+            const rememberMe = document.getElementById('rememberMe').checked; // 讀取 checkbox 狀態
 
             try {
                 const { data: authData, error: authError } = await supabaseClient.auth.signInWithPassword({ email, password });
@@ -182,7 +182,7 @@
                 sessionStorage.setItem(window.AppConfig.StorageKeys.USER_ROLE, profileData.role || 'user');
                 sessionStorage.setItem(window.AppConfig.StorageKeys.USER_NAME, profileData.full_name || email);
 
-                // [新增] 處理記住我邏輯
+                // 處理記住我邏輯
                 if (rememberMe) {
                     localStorage.setItem('savedEmail', email);
                 } else {
@@ -201,7 +201,7 @@
                 btn.disabled = false;
                 btn.innerText = '登入系統';
                 
-                // Shake 動畫 (樣式定義在 style.css)
+                // Shake 動畫
                 document.querySelector('.login-card').classList.add('shake');
                 setTimeout(() => document.querySelector('.login-card').classList.remove('shake'), 500);
             }
