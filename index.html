@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>系統導向中...</title>
+    <script>
+        // 檢查是否有登入紀錄
+        const userId = sessionStorage.getItem('currentUserId');
+
+        if (userId) {
+            // 情境 A: 已登入 -> 直接送去儀表板
+            window.location.replace('dashboard.html');
+        } else {
+            // 情境 B: 未登入 -> 送去登入頁
+            window.location.replace('login.html');
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>
