@@ -33,7 +33,8 @@ function checkAuth() {
     
     // 若無 User ID，踢回登入頁
     if (!userId) {
-        window.location.href = window.AppConfig.Paths.LOGIN;
+        // [修正] 確保跳轉至 index.html
+        window.location.href = window.AppConfig.Paths.LOGIN || 'index.html';
     }
 }
 
@@ -148,7 +149,8 @@ window.logoutSystem = function() {
         // 清除 LocalStorage (若有使用的話，保險起見)
         localStorage.clear();
         
-        // 跳轉回登入頁
-        window.location.href = window.AppConfig.Paths.LOGIN || 'login.html';
+        // [修正] 跳轉回登入頁 (index.html)
+        // 優先讀取 Config 設定，若無則使用字串 'index.html'
+        window.location.href = window.AppConfig.Paths.LOGIN || 'index.html';
     }
 };
