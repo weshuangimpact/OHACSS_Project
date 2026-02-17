@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>線上客服中心 | OHACSS</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <link href="style.css" rel="stylesheet">
+    
+    <style>
+        :root { 
+            /* 定義本頁主題色：Service 粉紅色 */
+            --theme-color: #e83e8c; 
+            --theme-light: #fce4ec; /* 淺粉色背景 */
+        }
+
+        /* 覆寫字卡標題顏色 */
+        .instruction-title {
+            color: var(--theme-color);
+        }
+
+        /* =========================================
+           本頁特定 UI 元件設定
+           ========================================= */
+        
+        /* 側邊資訊卡片 */
+        .contact-info-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+        }
+        .contact-info-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .card-phone { border-left-color: #0d6efd; }
+        .card-email { border-left-color: #ffc107; }
+
+        .icon-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #f8f9fa;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.25rem;
+            margin-right: 15px;
+        }
+        
+        /* 導引卡片文字顏色 */
+        .text-pink { color: var(--theme-color); }
+    </style>
+</head>
+<body>
+
+    <div class="container-fluid px-4 mt-4 pb-5 main-content">
+        
+        <div class="mb-4">
+            <h2 class="fw-bold text-dark mb-1">線上客服中心</h2>
+            <p class="text-secondary">Always Here：您的專屬系統服務管家</p>
+        </div>
+
+        <div class="instruction-box">
+            <div class="instruction-title">
+                <i class="fas fa-headset me-2"></i>Service Support：溝通與支援機制
+            </div>
+            <p class="mb-0 text-dark" style="line-height: 1.6;">
+                本模組提供即時且可追蹤的溝通管道，確保使用者提出的問題、異常與需求能被有效記錄、回應與處置，作為管理體系中支援、溝通與持續改善的重要輔助機制。
+            </p>
+        </div>
+
+        <div class="row g-4">
+            
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm h-100 bg-white">
+                    <div class="card-body d-flex flex-column align-items-center justify-content-center text-center p-5">
+                        <div class="mb-4 p-4 rounded-circle" style="background-color: var(--theme-light);">
+                            <i class="fas fa-comments text-pink" style="font-size: 4rem;"></i>
+                        </div>
+                        <h3 class="fw-bold text-dark">OHSMS 線上支援助理</h3>
+                        <p class="text-muted fs-5 mt-2">
+                            遇到問題了嗎？無需安裝軟體，<br>
+                            請點擊畫面 <strong class="text-pink">右下角</strong> 的綠色圖示 <i class="fas fa-comment-dots"></i><br>
+                            即可開始與客服人員免登入對談。
+                        </p>
+                        
+                        <div class="mt-4 p-3 bg-light rounded text-start d-inline-block border">
+                            <small class="text-secondary">
+                                <i class="fas fa-info-circle me-2 text-pink"></i>服務時間：週一至週五 09:00 - 18:00<br>
+                                <i class="fas fa-moon me-2 text-pink"></i>非服務時間請直接發送E-MAIL，我們將於次一工作日優先回覆。
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <h5 class="fw-bold mb-3 text-secondary">其他聯絡方式</h5>
+                
+                <div class="contact-info-card card-phone" onclick="location.href='tel:0912310570'">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-circle text-white bg-primary">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1">緊急客服專線</h6>
+                            <small class="text-muted">0912-310-570</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-info-card card-email" onclick="location.href='mailto:wesmartaitaiwan@gmail.com'">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-circle text-dark bg-warning">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div style="overflow: hidden;">
+                            <h6 class="fw-bold mb-1">問題回報信箱</h6>
+                            <small class="text-muted text-truncate d-block">wesmartaitaiwan@gmail.com</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm mt-4 bg-light">
+                    <div class="card-body">
+                        <h6 class="fw-bold mb-3"><i class="fas fa-question-circle me-2 text-secondary"></i>常見問題 (FAQ)</h6>
+                        <ul class="list-unstyled small mb-0">
+                            <li class="mb-2"><a href="#" class="text-decoration-none text-secondary">• 忘記登入密碼如何重設？</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none text-secondary">• 如何上傳顧問訪視紀錄？</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none text-secondary">• 帳號權限不足無法存取頁面？</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script src="config.js"></script>
+    
+    <script src="layout.js"></script>
+
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/697d86ca0f84561c354701fe/1jg95d25c';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+</body>
+</html>
