@@ -42,9 +42,8 @@ body {
 
     /* --- [核心技術：純代碼生成櫻花背景] --- */
     background-image: 
-        /* 第1層：SVG 櫻花花瓣 (Data URI) */
-        /* 這裡定義了兩個白色半透明的花瓣形狀，旋轉不同角度，無需外部圖片 */
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M30 10c-5-8-20-5-22 5s5 20 15 20 15 15 15 15s10-15 10-25-5-20-10-20-8 5-8 5z' fill='%23ffffff' fill-opacity='0.5' transform='rotate(15 30 30) scale(0.6)'/%3E%3Cpath d='M80 60c-5-8-20-5-22 5s5 20 15 20 15 15 15 15s10-15 10-25-5-20-10-20-8 5-8 5z' fill='%23ffffff' fill-opacity='0.3' transform='rotate(-30 80 80) scale(0.8)'/%3E%3C/svg%3E"),
+        /* 第1層：SVG 櫻花花瓣 (Data URI) - 已修正為指定的心形花瓣外觀 */
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3C!-- 花瓣1: 旋轉15度 --%3E%3Cpath d='M50 95 C20 70 0 40 20 15 C30 5 50 30 50 30 C50 30 70 5 80 15 C100 40 80 70 50 95 Z' fill='%23ffffff' fill-opacity='0.6' transform='translate(-10, -10) rotate(15 50 50) scale(0.5)'/%3E%3C!-- 花瓣2: 旋轉-30度 --%3E%3Cpath d='M50 95 C20 70 0 40 20 15 C30 5 50 30 50 30 C50 30 70 5 80 15 C100 40 80 70 50 95 Z' fill='%23ffffff' fill-opacity='0.4' transform='translate(50, 20) rotate(-30 50 50) scale(0.7)'/%3E%3C/svg%3E"),
         
         /* 第2層：粉色柔光漸層 (營造春天氛圍) */
         radial-gradient(circle at 10% 20%, rgba(255, 230, 235, 0.7) 0%, rgba(255, 255, 255, 0) 50%);
@@ -58,11 +57,10 @@ body {
     /* 背景尺寸：花瓣圖案大小 (300px 確保在手機上也好看)，漸層撐滿全螢幕 */
     background-size: 300px 300px, cover;
 
-    /* 背景固定：漸層固定不動，花瓣隨頁面捲動產生視差 (或可改為 fixed 讓花瓣也不動) */
+    /* 背景固定：漸層固定不動，花瓣隨頁面捲動產生視差 */
     background-attachment: fixed, fixed;
 
     /* --- [動態效果] 讓花瓣緩慢飄動 --- */
-    /* 注意：這會讓花瓣背景無限循環移動，營造「飄落/流動」感 */
     animation: sakura-drift 60s linear infinite;
 }
 
