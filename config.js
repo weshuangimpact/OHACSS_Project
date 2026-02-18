@@ -29,9 +29,7 @@ const AppConfig = {
     StorageKeys: {
         USER_ID: 'currentUserId',
         USER_ROLE: 'currentUserRole',
-        USER_NAME: 'currentUserName',
-        // [新增] 記住我功能的專用 Key，確保名稱統一
-        SAVED_EMAIL: 'ohacss_saved_email' 
+        USER_NAME: 'currentUserName'
     }
 };
 
