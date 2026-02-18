@@ -1,5 +1,5 @@
 /* ==========================================================================
-   style.css - 全站共用視覺規範 (春日櫻花·純代碼生成版)
+   style.css - 全站共用視覺規範 (春日櫻花·真實圖片版)
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
@@ -40,24 +40,24 @@ body {
     flex-direction: column;
     min-height: 100vh;
 
-    /* --- [核心技術：純代碼生成櫻花背景] --- */
+    /* --- [背景設定：使用真實圖片路徑] --- */
     background-image: 
-        /* 第1層：SVG 櫻花花瓣 (Data URI) - 已修正為指定的心形花瓣外觀 */
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3C!-- 花瓣1: 旋轉15度 --%3E%3Cpath d='M50 95 C20 70 0 40 20 15 C30 5 50 30 50 30 C50 30 70 5 80 15 C100 40 80 70 50 95 Z' fill='%23ffffff' fill-opacity='0.6' transform='translate(-10, -10) rotate(15 50 50) scale(0.5)'/%3E%3C!-- 花瓣2: 旋轉-30度 --%3E%3Cpath d='M50 95 C20 70 0 40 20 15 C30 5 50 30 50 30 C50 30 70 5 80 15 C100 40 80 70 50 95 Z' fill='%23ffffff' fill-opacity='0.4' transform='translate(50, 20) rotate(-30 50 50) scale(0.7)'/%3E%3C/svg%3E"),
+        /* 第1層：真實櫻花圖片 (請確保該路徑下的 SVG 為白色半透明) */
+        url('OHACSS_Project/sakura.svg'),
         
         /* 第2層：粉色柔光漸層 (營造春天氛圍) */
         radial-gradient(circle at 10% 20%, rgba(255, 230, 235, 0.7) 0%, rgba(255, 255, 255, 0) 50%);
 
-    /* 背景重複設定：花瓣重複鋪滿，漸層不重複 */
+    /* 背景重複設定：花瓣重複鋪滿 (Tile)，漸層不重複 */
     background-repeat: repeat, no-repeat;
 
     /* 背景位置：初始位置 */
     background-position: 0 0, center;
 
-    /* 背景尺寸：花瓣圖案大小 (300px 確保在手機上也好看)，漸層撐滿全螢幕 */
+    /* 背景尺寸：設定圖片大小 (300px 確保在手機/電腦上都適中) */
     background-size: 300px 300px, cover;
 
-    /* 背景固定：漸層固定不動，花瓣隨頁面捲動產生視差 */
+    /* 背景固定：漸層固定不動，花瓣隨頁面捲動產生視差 (或可改為 fixed 讓花瓣也不動) */
     background-attachment: fixed, fixed;
 
     /* --- [動態效果] 讓花瓣緩慢飄動 --- */
