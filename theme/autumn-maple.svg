@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 423 402.5" style="enable-background:new 0 0 423 402.5;" xml:space="preserve">
+<style type="text/css">
+	/* 與櫻花一致：白色填充，透明度 0.9 */
+	.st0{fill:#FFFFFF; fill-opacity: 0.9;}
+</style>
+<g transform="translate(169.2, 161)">
+	<path class="st0" d="M42.3,80.5 v-17.6 c5.6,2.2,11.5,3.3,17.4,3.3 l-4.2-10.8 l13.8,3.5 l-8.9-12.7 l15.7-1.1 l-14.7-5.9 
+		l10.8-11.5 l-15.7,2.2 l3.9-15.3 L42.3,27.1 L24.1,14.6 l3.9,15.3 l-15.7-2.2 l10.8,11.5 L8.4,45.1 l15.7,1.1 l-8.9,12.7 
+		l13.8-3.5 l-4.2,10.8 c5.9,0,11.8-1.1,17.4-3.3 v17.6 H42.3z"/>
+</g>
+</svg>
