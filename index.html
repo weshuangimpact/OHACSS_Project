@@ -11,26 +11,19 @@
     <link href="style.css" rel="stylesheet">
     
     <style>
-        /* 確保登入頁背景呈現漸層，而非內頁的純灰 */
         .main-content {
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            /* [修正] 新增 Flex 屬性以達成垂直水平置中 */
             display: flex;
             align-items: center;
             justify-content: center;
-            /* 扣除 Navbar(85px) 與 Footer(85px) 的高度，確保內容區塊填滿剩餘空間 */
             min-height: calc(100vh - 170px); 
             padding: 20px;
         }
-        
-        /* 確保 Body 滿版以支援 Flex 排版 */
         body {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
-
-        /* 登入卡片寬度限制 (維持原樣) */
         .login-card {
             width: 100%;
             max-width: 400px;
@@ -53,9 +46,9 @@
 
     <div class="main-content">
         <div class="card login-card">
-            <div class="card-header">
-                <h3 class="mb-0"><i class="fas fa-shield-alt me-2"></i>OHACSS</h3>
-                <small class="opacity-75"></small>
+            <div class="card-header bg-dark text-white text-center py-4">
+                <h3 class="mb-1"><i class="fas fa-shield-alt me-2"></i>OHCASS</h3>
+                <small class="opacity-75 d-block">職業健康評鑑與合規支援系統</small>
             </div>
             <div class="card-body p-4">
                 <div id="error-msg" class="alert alert-danger py-2 small" role="alert" style="display: none;">
@@ -125,23 +118,29 @@
     <script src="config.js"></script>
 
     <script>
-        // 1. 初始化 Supabase (改用 Config 讀取)
-        if (typeof window.AppConfig === 'undefined') alert('錯誤：Config 未載入');
-        
+        // 1. 初始化檢查
+        if (typeof window.AppConfig === 'undefined') {
+            alert('錯誤：Config 未載入，請確認 config.js 是否存在');
+            throw new Error('AppConfig missing');
+        }
+
         const supabaseClient = window.supabase.createClient(
             window.AppConfig.Supabase.URL, 
             window.AppConfig.Supabase.KEY
         );
 
-        // 2. 頁首時鐘與日期邏輯 & 記住我初始化
+        // 2. 頁面載入時執行
         document.addEventListener('DOMContentLoaded', function() {
-            // [新增] 檢查 LocalStorage 是否有記住的 Email
-            const savedEmail = localStorage.getItem('savedEmail');
+            // [關鍵修正] 從 Config 讀取 Key，並從 LocalStorage 恢復 Email
+            const savedKey = window.AppConfig.StorageKeys.SAVED_EMAIL;
+            const savedEmail = localStorage.getItem(savedKey);
+            
             if (savedEmail) {
                 document.getElementById('email').value = savedEmail;
                 document.getElementById('rememberMe').checked = true;
             }
 
+            // 時鐘邏輯
             setInterval(() => {
                 const el = document.getElementById('header-clock');
                 if(el) el.textContent = new Date().toLocaleTimeString('zh-TW', { hour12: false });
@@ -168,7 +167,7 @@
 
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
-            const rememberMe = document.getElementById('rememberMe').checked; // [新增] 讀取 checkbox 狀態
+            const rememberMe = document.getElementById('rememberMe').checked;
 
             try {
                 const { data: authData, error: authError } = await supabaseClient.auth.signInWithPassword({ email, password });
@@ -177,22 +176,23 @@
                 const { data: profileData, error: profileError } = await supabaseClient.from('profiles').select('*').eq('id', authData.user.id).single();
                 if (profileError || !profileData) throw new Error('讀取使用者權限失敗');
 
-                // 使用 Config 中的 Key 避免手誤
+                // 儲存 Session
                 sessionStorage.setItem(window.AppConfig.StorageKeys.USER_ID, authData.user.id);
                 sessionStorage.setItem(window.AppConfig.StorageKeys.USER_ROLE, profileData.role || 'user');
                 sessionStorage.setItem(window.AppConfig.StorageKeys.USER_NAME, profileData.full_name || email);
 
-                // [新增] 處理記住我邏輯
+                // [關鍵修正] 記住我邏輯：使用 Config 定義的 Key
+                const savedKey = window.AppConfig.StorageKeys.SAVED_EMAIL;
                 if (rememberMe) {
-                    localStorage.setItem('savedEmail', email);
+                    localStorage.setItem(savedKey, email);
                 } else {
-                    localStorage.removeItem('savedEmail');
+                    localStorage.removeItem(savedKey);
                 }
 
                 btn.innerHTML = '<i class="fas fa-check me-2"></i>登入成功，跳轉中...';
                 
-                // 跳轉至儀表板 (讀取 Config 路徑，預設 dashboard.html)
-                setTimeout(() => window.location.href = window.AppConfig.Paths.DASHBOARD || 'dashboard.html', 500);
+                // 跳轉至儀表板
+                setTimeout(() => window.location.href = window.AppConfig.Paths.DASHBOARD, 500);
 
             } catch (err) {
                 console.error(err);
@@ -201,13 +201,12 @@
                 btn.disabled = false;
                 btn.innerText = '登入系統';
                 
-                // Shake 動畫 (樣式定義在 style.css)
                 document.querySelector('.login-card').classList.add('shake');
                 setTimeout(() => document.querySelector('.login-card').classList.remove('shake'), 500);
             }
         });
 
-        // 4. 忘記密碼邏輯
+        // 4. 忘記密碼發送
         async function sendReset() {
             const email = document.getElementById('reset-email').value.trim();
             if (!email) return alert('請輸入 Email');
@@ -218,27 +217,21 @@
             btn.innerText = '發送中...';
 
             try {
-                // 自動計算重設連結
+                // 使用絕對路徑確保跳轉正確
                 const resetPath = window.AppConfig.Paths.RESET_PASSWORD || 'reset_password.html';
                 const redirectUrl = new URL(resetPath, window.location.href).href;
-                console.log('目標重設網址:', redirectUrl);
 
-                // 呼叫 Edge Function
                 const { data, error } = await supabaseClient.functions.invoke('reset-password', {
-                    body: { 
-                        email: email,
-                        redirectTo: redirectUrl 
-                    }
+                    body: { email: email, redirectTo: redirectUrl }
                 });
                 
                 if (error) throw error;
                 if (data && data.error) throw new Error(data.error);
 
-                alert('✅ 重設信已發送！\n請至您的信箱收取信件，點擊連結後即可設定新密碼。');
+                alert('✅ 重設信已發送！\n請至您的信箱收取信件。');
                 bootstrap.Modal.getInstance(document.getElementById('forgotModal')).hide();
-
             } catch (err) {
-                console.error('重設密碼失敗:', err);
+                console.error('Reset failed:', err);
                 alert('❌ 發送失敗: ' + err.message);
             } finally {
                 btn.disabled = false;
