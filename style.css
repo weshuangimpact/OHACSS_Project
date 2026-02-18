@@ -1,23 +1,27 @@
 /* ==========================================================================
-   style.css - 全站共用視覺規範
-   來源整合：index1.html (內頁) + login.html (登入頁)
-   原則：保留原始參數，僅做結構化合併
+   style.css - 全站共用視覺規範 (春日櫻花護理版)
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
    1. 基礎重置與全域設定 (Global Reset)
    -------------------------------------------------------------------------- */
 :root {
-    /* 品牌色 (參照原始設定) */
-    --brand-dark: #202124;      /* Header/Footer 深黑色 */
-    --brand-primary: #0d6efd;   /* Bootstrap Primary Blue */
-    --brand-bg: #f8f9fa;        /* 網頁背景淺灰 */
+    /* --- [修改] 品牌色：春日櫻花主題 --- */
     
-    /* 系統語意色 (PDCA) */
-    --sys-plan: #0d6efd;   /* Plan (藍) */
-    --sys-do:   #198754;   /* Do/Check (綠) */
-    --sys-check:#ffc107;   /* Evaluation (黃) */
-    --sys-act:  #dc3545;   /* Act (紅) */
+    /* Header/Footer: 改為深紫藕色 (比純黑溫暖，與粉色相容性高) */
+    --brand-dark: #5e4b56; 
+    
+    /* 主要按鈕: 調整為稍微帶紫的藍，或保持原樣 */
+    --brand-primary: #0d6efd;   
+
+    /* 網頁背景: 極淡的櫻花粉白 (避免刺眼) */
+    --brand-bg: #fff5f7;        
+    
+    /* 系統語意色 (保留 PDCA 識別，但可稍微粉嫩化，這裡先維持標準以保專業) */
+    --sys-plan: #0d6efd;
+    --sys-do:   #198754;
+    --sys-check:#ffc107;
+    --sys-act:  #dc3545;
     
     /* 預設字體 */
     --main-font: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
@@ -35,29 +39,29 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-}
 
-/* 讓主要內容區塊自動撐開，將 Footer 推到底部 */
-.main-content, .container {
-    flex: 1;
-    width: 100%;
+    /* --- [新增] 背景櫻花氛圍 (CSS 漸層模擬，不需圖檔) --- */
+    /* 這是一個很淡的徑向漸層，模擬光暈，比純色更有質感 */
+    background-image: radial-gradient(circle at 10% 20%, rgba(255, 230, 235, 0.6) 0%, rgba(255, 255, 255, 0) 40%);
+    background-attachment: fixed; /* 背景固定，滑動時有層次感 */
 }
 
 /* --------------------------------------------------------------------------
-   2. 共用版型元件 (Layout Components)
+   2. 共用版型元件 (配合新色系調整)
    -------------------------------------------------------------------------- */
 
 /* 2.1 導覽列 (Navbar) */
 .navbar {
-    background-color: var(--brand-dark) !important;
-    min-height: 85px; /* 統一高度 */
+    background-color: var(--brand-dark) !important; /* 使用新的深紫藕色 */
+    min-height: 85px;
     color: #fff;
-    flex-shrink: 0; /* 防止被壓縮 */
+    flex-shrink: 0;
+    box-shadow: 0 2px 10px rgba(94, 75, 86, 0.2); /* [新增] 柔和陰影 */
 }
 
 /* 2.2 頁尾 (Footer) */
 footer {
-    background-color: var(--brand-dark) !important;
+    background-color: var(--brand-dark) !important; /* 使用新的深紫藕色 */
     color: #fff;
     flex-shrink: 0;
     font-size: 0.9rem;
@@ -72,243 +76,47 @@ footer {
 }
 
 /* --------------------------------------------------------------------------
-   3. 內頁專用樣式 (Inner Page Specific)
-   來源：index1.html
+   3. 內頁元件微調 (讓白色卡片在粉色背景更突出)
    -------------------------------------------------------------------------- */
 
-/* 3.1 PDCA 說明區塊 (.instruction-box) */
-.instruction-box {
-    background-color: #fff;
-    border-left: 5px solid var(--theme-color, #0d6efd); /* 預設藍色，可被頁面覆蓋 */
-    padding: 20px 25px;
-    border-radius: 4px;
-    margin-bottom: 30px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    width: 100%;
-    text-align: left;
-}
-
-.instruction-title {
-    color: var(--theme-color, #0d6efd);
-    font-weight: 700;
-    margin-bottom: 10px;
-}
-
-/* 3.2 步驟指示器 (.step-indicator) */
-.step-indicator {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 30px;
-    position: relative;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.step-indicator::before {
-    content: '';
-    position: absolute;
-    top: 15px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: #e0e0e0;
-    z-index: 0;
-}
-
-.step-item {
-    position: relative;
-    z-index: 1;
-    background: #f8f9fa;
-    padding: 0 10px;
-    text-align: center;
-    color: #999;
-    font-weight: 600;
-}
-
-.step-item.active {
-    color: var(--theme-color, #0d6efd);
-}
-
-.step-circle {
-    width: 32px;
-    height: 32px;
-    background: #e0e0e0;
-    color: #fff;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 8px;
-    font-weight: bold;
-    transition: all 0.3s;
-}
-
-.step-item.active .step-circle {
-    background: var(--theme-color, #0d6efd);
-    box-shadow: 0 0 0 5px rgba(13, 110, 253, 0.2); /* 使用 rgba 模擬 */
-}
-
-.step-item.completed .step-circle {
-    background: #198754; /* 完成綠 */
-}
-
-/* 3.3 紀錄卡片 (.record-card) */
+/* 卡片與區塊增加一點粉色系的陰影，讓整體融合 */
+.instruction-box, 
+.card,
+.info-card,
 .record-card {
-    cursor: pointer;
-    border: 1px solid #eee;
-    transition: all 0.2s;
-    background: #fff;
-}
-
-.record-card:hover, .record-card.selected {
-    border-color: var(--theme-color, #0d6efd);
-    background-color: var(--theme-light, #e7f1ff);
-}
-
-/* 3.4 檢查清單 (.check-list-group) */
-.check-list-group .list-group-item {
-    border: 1px solid #eee;
-    margin-bottom: 8px;
-    border-radius: 6px !important;
-    transition: background 0.2s;
-    padding: 12px 15px;
-}
-
-.check-list-group .list-group-item:hover {
-    background-color: #f8f9fa;
-}
-
-.form-check-input:checked + .form-check-label {
-    color: var(--theme-color, #0d6efd);
-    font-weight: bold;
-}
-
-/* 3.5 項目操作按鈕 (.item-actions) */
-.item-actions {
-    display: none;
-    align-items: center;
-    gap: 8px;
-    margin-left: auto;
-}
-
-.item-actions.visible {
-    display: flex;
-}
-
-/* 3.6 備註與歷程 (.remark-box, .history-item) */
-.remark-box {
-    border: 2px dashed #cbd5e1;
-    background-color: #f8fafc;
-    border-radius: 6px;
-    padding: 15px;
-    margin-bottom: 20px;
-}
-
-.review-history-item {
-    border-left: 4px solid #ffc107;
-    background-color: #fff9e6;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 4px;
-}
-
-.improvement-history-item {
-    border-left: 4px solid #198754;
-    background-color: #f0fff4;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 4px;
-}
-
-.review-meta {
-    font-size: 0.85rem;
-    color: #666;
-    margin-bottom: 5px;
-    display: flex;
-    justify-content: space-between;
-}
-
-.section-title {
-    border-left: 5px solid var(--theme-color, #0d6efd);
-    padding-left: 15px;
-    margin-bottom: 20px;
-}
-
-/* --------------------------------------------------------------------------
-   4. 登入頁專用樣式 (Login Page Specific)
-   來源：login.html
-   -------------------------------------------------------------------------- */
-
-/* 4.1 登入背景容器 */
-.login-main-content {
-    /* 為了區隔內頁，建議在 login.html 的 div 加上此 class，或直接使用原本的 style tag 覆蓋 */
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-/* 4.2 登入卡片 (.login-card) */
-.login-card {
-    width: 100%;
-    max-width: 400px;
-    border: none;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    overflow: hidden;
     background-color: #fff;
+    /* 陰影帶一點點粉色，而非純黑灰 */
+    box-shadow: 0 4px 15px rgba(255, 182, 193, 0.15) !important; 
+    border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
-.login-card .card-header {
-    background-color: #2c3e50;
-    color: white;
-    padding: 2rem;
-    text-align: center;
-    border-bottom: none;
-}
-
-.login-btn {
-    background-color: #2c3e50;
-    border: none;
-    padding: 10px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    color: white;
-}
-
-.login-btn:hover {
-    background-color: #34495e;
-    color: white;
-}
-
-/* 4.3 錯誤搖晃動畫 (.shake) */
-.shake {
-    animation: shake 0.5s;
-}
-
-@keyframes shake {
-    0% { transform: translate(1px, 1px) rotate(0deg); }
-    10% { transform: translate(-1px, -2px) rotate(-1deg); }
-    20% { transform: translate(-3px, 0px) rotate(1deg); }
-    30% { transform: translate(3px, 2px) rotate(0deg); }
-    40% { transform: translate(1px, -1px) rotate(1deg); }
-    50% { transform: translate(-1px, 2px) rotate(-1deg); }
-    60% { transform: translate(-3px, 1px) rotate(0deg); }
-    70% { transform: translate(3px, 1px) rotate(-1deg); }
-    80% { transform: translate(-1px, -1px) rotate(1deg); }
-    90% { transform: translate(1px, 2px) rotate(0deg); }
-    100% { transform: translate(1px, -2px) rotate(-1deg); }
-}
-
-/* --------------------------------------------------------------------------
-   5. 工具類 (Utilities)
-   -------------------------------------------------------------------------- */
-.cursor-pointer {
-    cursor: pointer;
-}
-
-.fw-bold-600 {
-    font-weight: 600;
-}
+/* 其餘 CSS 保持原樣... */
+.main-content, .container { flex: 1; width: 100%; }
+.step-indicator { display: flex; justify-content: space-between; margin-bottom: 30px; position: relative; max-width: 600px; margin-left: auto; margin-right: auto;}
+.step-indicator::before { content: ''; position: absolute; top: 15px; left: 0; right: 0; height: 2px; background: #e0e0e0; z-index: 0; }
+.step-item { position: relative; z-index: 1; background: var(--brand-bg); /* [修正] 讓步驟條背景同 Body */ padding: 0 10px; text-align: center; color: #999; font-weight: 600; }
+.step-item.active { color: var(--theme-color, #0d6efd); }
+.step-circle { width: 32px; height: 32px; background: #e0e0e0; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; font-weight: bold; transition: all 0.3s; }
+.step-item.active .step-circle { background: var(--theme-color, #0d6efd); box-shadow: 0 0 0 5px rgba(13, 110, 253, 0.2); }
+.step-item.completed .step-circle { background: #198754; }
+.record-card { cursor: pointer; border: 1px solid #eee; transition: all 0.2s; background: #fff; }
+.record-card:hover, .record-card.selected { border-color: var(--theme-color, #0d6efd); background-color: var(--theme-light, #e7f1ff); }
+.check-list-group .list-group-item { border: 1px solid #eee; margin-bottom: 8px; border-radius: 6px !important; transition: background 0.2s; padding: 12px 15px; }
+.check-list-group .list-group-item:hover { background-color: #fff0f5; /* [修正] 列表 hover 改為極淡粉 */ }
+.form-check-input:checked + .form-check-label { color: var(--theme-color, #0d6efd); font-weight: bold; }
+.item-actions { display: none; align-items: center; gap: 8px; margin-left: auto; }
+.item-actions.visible { display: flex; }
+.remark-box { border: 2px dashed #cbd5e1; background-color: #f8fafc; border-radius: 6px; padding: 15px; margin-bottom: 20px; }
+.review-history-item { border-left: 4px solid #ffc107; background-color: #fff9e6; padding: 15px; margin-bottom: 15px; border-radius: 4px; }
+.improvement-history-item { border-left: 4px solid #198754; background-color: #f0fff4; padding: 15px; margin-bottom: 15px; border-radius: 4px; }
+.review-meta { font-size: 0.85rem; color: #666; margin-bottom: 5px; display: flex; justify-content: space-between; }
+.section-title { border-left: 5px solid var(--theme-color, #0d6efd); padding-left: 15px; margin-bottom: 20px; }
+.login-main-content { background: linear-gradient(135deg, #fff0f5 0%, #e6e9f0 100%); /* [修正] 登入頁也微調為粉色漸層 */ display: flex; align-items: center; justify-content: center; padding: 20px; }
+.login-card { width: 100%; max-width: 400px; border: none; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); overflow: hidden; background-color: #fff; }
+.login-card .card-header { background-color: var(--brand-dark); /* [修正] 登入卡片頭部同 Header */ color: white; padding: 2rem; text-align: center; border-bottom: none; }
+.login-btn { background-color: var(--brand-dark); /* [修正] 按鈕同 Header */ border: none; padding: 10px; font-weight: 600; letter-spacing: 1px; color: white; }
+.login-btn:hover { background-color: #4a3b45; color: white; }
+.shake { animation: shake 0.5s; }
+@keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
+.cursor-pointer { cursor: pointer; }
+.fw-bold-600 { font-weight: 600; }
