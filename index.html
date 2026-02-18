@@ -132,12 +132,14 @@
         // 2. 頁面載入時執行
         document.addEventListener('DOMContentLoaded', function() {
             // [關鍵修正] 從 Config 讀取 Key，並從 LocalStorage 恢復 Email
+            // 確保 config.js 已新增 SAVED_EMAIL 欄位
             const savedKey = window.AppConfig.StorageKeys.SAVED_EMAIL;
-            const savedEmail = localStorage.getItem(savedKey);
-            
-            if (savedEmail) {
-                document.getElementById('email').value = savedEmail;
-                document.getElementById('rememberMe').checked = true;
+            if (savedKey) {
+                const savedEmail = localStorage.getItem(savedKey);
+                if (savedEmail) {
+                    document.getElementById('email').value = savedEmail;
+                    document.getElementById('rememberMe').checked = true;
+                }
             }
 
             // 時鐘邏輯
@@ -176,23 +178,25 @@
                 const { data: profileData, error: profileError } = await supabaseClient.from('profiles').select('*').eq('id', authData.user.id).single();
                 if (profileError || !profileData) throw new Error('讀取使用者權限失敗');
 
-                // 儲存 Session
+                // 儲存 Session (使用 Config Keys)
                 sessionStorage.setItem(window.AppConfig.StorageKeys.USER_ID, authData.user.id);
                 sessionStorage.setItem(window.AppConfig.StorageKeys.USER_ROLE, profileData.role || 'user');
                 sessionStorage.setItem(window.AppConfig.StorageKeys.USER_NAME, profileData.full_name || email);
 
                 // [關鍵修正] 記住我邏輯：使用 Config 定義的 Key
                 const savedKey = window.AppConfig.StorageKeys.SAVED_EMAIL;
-                if (rememberMe) {
-                    localStorage.setItem(savedKey, email);
-                } else {
-                    localStorage.removeItem(savedKey);
+                if (savedKey) {
+                    if (rememberMe) {
+                        localStorage.setItem(savedKey, email);
+                    } else {
+                        localStorage.removeItem(savedKey);
+                    }
                 }
 
                 btn.innerHTML = '<i class="fas fa-check me-2"></i>登入成功，跳轉中...';
                 
-                // 跳轉至儀表板
-                setTimeout(() => window.location.href = window.AppConfig.Paths.DASHBOARD, 500);
+                // 跳轉至儀表板 (讀取 Config 路徑，預設 dashboard.html)
+                setTimeout(() => window.location.href = window.AppConfig.Paths.DASHBOARD || 'dashboard.html', 500);
 
             } catch (err) {
                 console.error(err);
@@ -217,7 +221,7 @@
             btn.innerText = '發送中...';
 
             try {
-                // 使用絕對路徑確保跳轉正確
+                // 使用 Config 設定的路徑
                 const resetPath = window.AppConfig.Paths.RESET_PASSWORD || 'reset_password.html';
                 const redirectUrl = new URL(resetPath, window.location.href).href;
 
