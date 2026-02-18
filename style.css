@@ -1,27 +1,22 @@
 /* ==========================================================================
-   style.css - 全站共用視覺規範 (春日櫻花·真實圖片版)
+   style.css - 全站共用視覺規範 (五大主題版)
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   1. 基礎重置與全域設定 (Global Reset)
+   1. 基礎重置與全域變數 (預設：黑白主題 Black & White)
    -------------------------------------------------------------------------- */
 :root {
-    /* --- [品牌色：春日櫻花主題] --- */
-    
-    /* Header/Footer: 深紫藕色 (溫暖且專業) */
-    --brand-dark: #5e4b56; 
-    
-    /* 主要按鈕: 維持 Bootstrap Primary Blue (確保操作辨識度) */
-    --brand-primary: #0d6efd;   
-
-    /* 網頁背景: 極淡的櫻花粉白 */
-    --brand-bg: #fff5f7;        
-    
-    /* 系統語意色 (PDCA) */
+    /* --- 系統核心語意色 (PDCA 固定不變) --- */
     --sys-plan: #0d6efd;   /* Plan (藍) */
     --sys-do:   #198754;   /* Do/Check (綠) */
     --sys-check:#ffc107;   /* Evaluation (黃) */
     --sys-act:  #dc3545;   /* Act (紅) */
+    
+    /* --- 預設品牌色 (黑白主題) --- */
+    --brand-dark: #202124;      /* Header/Footer: 純黑 */
+    --brand-primary: #0d6efd;   /* 按鈕: 藍色 */
+    --brand-bg: #ffffff;        /* 背景: 純白 */
+    --card-border: #dee2e6;     /* 卡片邊框: 淺灰 */
     
     /* 預設字體 */
     --main-font: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
@@ -39,62 +34,119 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-
-    /* --- [背景設定：使用真實圖片路徑] --- */
-    background-image: 
-        /* 第1層：真實櫻花圖片 (請確保該路徑下的 SVG 為白色半透明) */
-        url('OHACSS_Project/theme/sakura.svg'),
-        
-        /* 第2層：粉色柔光漸層 (營造春天氛圍) */
-        radial-gradient(circle at 10% 20%, rgba(255, 230, 235, 0.7) 0%, rgba(255, 255, 255, 0) 50%);
-
-    /* 背景重複設定：花瓣重複鋪滿 (Tile)，漸層不重複 */
+    
+    /* 背景圖設定 (預設無) */
     background-repeat: repeat, no-repeat;
-
-    /* 背景位置：初始位置 */
     background-position: 0 0, center;
-
-    /* 背景尺寸：設定圖片大小 (300px 確保在手機/電腦上都適中) */
-    background-size: 300px 300px, cover;
-
-    /* 背景固定：漸層固定不動，花瓣隨頁面捲動產生視差 (或可改為 fixed 讓花瓣也不動) */
     background-attachment: fixed, fixed;
-
-    /* --- [動態效果] 讓花瓣緩慢飄動 --- */
-    animation: sakura-drift 60s linear infinite;
+    
+    /* 主題切換時的過場動畫 */
+    transition: background-color 0.5s ease, background-image 0.5s ease;
 }
 
-/* 定義花瓣飄動動畫 */
-@keyframes sakura-drift {
+/* --------------------------------------------------------------------------
+   2. 四季主題定義 (Themes)
+   說明：未來在 profile_settings 設定後，由 JS 在 body 加上對應 class
+   -------------------------------------------------------------------------- */
+
+/* === 春 (Spring) - 櫻花主題 === */
+body.theme-spring {
+    --brand-dark: #5e4b56;        /* 深紫藕色 */
+    --brand-bg: #ffeef2;          /* 極淡粉紅 */
+    --card-border: #e6dce0;       /* 粉灰邊框 */
+
+    background-image: 
+        url('OHACSS_Project/theme/spring-sakura.svg'),
+        radial-gradient(circle at 10% 20%, rgba(255, 182, 193, 0.4) 0%, rgba(255, 238, 242, 0.1) 60%);
+    
+    background-size: 300px 300px, cover;
+    animation: theme-drift-down 60s linear infinite;
+}
+
+/* === 夏 (Summer) - 藍天主題 === */
+body.theme-summer {
+    --brand-dark: #006064;        /* 深青色 */
+    --brand-bg: #e0f7fa;          /* 淡青色 */
+    --card-border: #b2ebf2;       /* 青藍邊框 */
+
+    background-image: 
+        url('OHACSS_Project/theme/summer-sun.svg'),
+        linear-gradient(180deg, #b3e5fc 0%, #ffffff 80%); /* 藍天漸層 */
+    
+    background-size: 400px 400px, cover;
+    animation: theme-float-up 40s linear infinite; /* 太陽/雲朵緩慢上升 */
+}
+
+/* === 秋 (Autumn) - 楓葉主題 === */
+body.theme-autumn {
+    --brand-dark: #5d4037;        /* 深褐色 */
+    --brand-bg: #fff3e0;          /* 淡橘黃 */
+    --card-border: #ffe0b2;       /* 橘黃邊框 */
+
+    background-image: 
+        url('OHACSS_Project/theme/autumn-maple.svg'),
+        radial-gradient(circle at 90% 10%, rgba(255, 204, 128, 0.4) 0%, rgba(255, 255, 255, 0) 70%);
+    
+    background-size: 300px 300px, cover;
+    animation: theme-drift-down 50s linear infinite;
+}
+
+/* === 冬 (Winter) - 冬夜/冰雪主題 === */
+body.theme-winter {
+    --brand-dark: #263238;        /* 藍灰色 (Winter Night Sky) */
+    --brand-bg: #eceff1;          /* 冷灰白 (Snow) */
+    --card-border: #cfd8dc;       /* 冷灰邊框 */
+
+    background-image: 
+        url('OHACSS_Project/theme/winter-snowflake.svg'),
+        linear-gradient(to bottom, #cfd8dc 0%, #ffffff 100%); /* 冷調漸層 */
+    
+    background-size: 300px 300px, cover;
+    animation: theme-drift-down 45s linear infinite;
+}
+
+/* --------------------------------------------------------------------------
+   3. 主題動畫定義 (Animations)
+   -------------------------------------------------------------------------- */
+
+/* 向下飄落 (櫻花、楓葉、雪花) */
+@keyframes theme-drift-down {
     from { background-position: 0 0, center; }
-    to   { background-position: 300px 600px, center; } /* 數值對應 background-size 的倍數以確保無縫 */
+    to   { background-position: 300px 600px, center; } 
 }
+
+/* 向上浮動 (夏日氣泡/雲朵) */
+@keyframes theme-float-up {
+    from { background-position: 0 400px, center; }
+    to   { background-position: 200px 0, center; }
+}
+
+/* --------------------------------------------------------------------------
+   4. 版面結構與共用元件
+   -------------------------------------------------------------------------- */
 
 /* 讓主要內容區塊自動撐開 */
 .main-content, .container, .container-fluid {
     flex: 1;
     width: 100%;
-    position: relative; /* 確保內容在背景之上 */
+    position: relative;
     z-index: 1;
 }
 
-/* --------------------------------------------------------------------------
-   2. 共用版型元件
-   -------------------------------------------------------------------------- */
-
 /* 2.1 導覽列 (Navbar) */
 .navbar {
-    background-color: var(--brand-dark) !important;
+    background-color: var(--brand-dark) !important; /* 跟隨主題變色 */
     min-height: 85px;
     color: #fff;
     flex-shrink: 0;
-    box-shadow: 0 2px 10px rgba(94, 75, 86, 0.2);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     z-index: 10;
+    transition: background-color 0.5s ease;
 }
 
 /* 2.2 頁尾 (Footer) */
 footer {
-    background-color: var(--brand-dark) !important;
+    background-color: var(--brand-dark) !important; /* 跟隨主題變色 */
     color: #fff;
     flex-shrink: 0;
     font-size: 0.9rem;
@@ -107,22 +159,22 @@ footer {
     padding: 15px 0;
     min-height: 85px;
     z-index: 10;
+    transition: background-color 0.5s ease;
 }
 
 /* --------------------------------------------------------------------------
-   3. 內頁專用樣式
+   5. 內頁元件樣式 (Inner Page Specific)
    -------------------------------------------------------------------------- */
 
-/* 卡片與說明區塊 (統一修正外框與陰影) */
+/* 卡片與說明區塊 (統一使用主題邊框色) */
 .instruction-box, 
 .card,
 .info-card,
 .record-card {
     background-color: #fff;
-    /* 陰影帶粉色光暈 */
-    box-shadow: 0 4px 15px rgba(255, 182, 193, 0.25) !important; 
-    /* 邊框：淡粉灰色 */
-    border: 1px solid #e6dce0 !important; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important; 
+    border: 1px solid var(--card-border) !important; /* 跟隨主題變色 */
+    transition: border-color 0.5s ease;
 }
 
 /* 覆寫部分卡片特定設定 */
@@ -166,12 +218,12 @@ footer {
 .step-item {
     position: relative;
     z-index: 1;
-    /* 背景色設為透明或與 body 漸層相容的顏色，這裡用淡粉色遮擋線條 */
-    background: #fff5f7; 
+    background: var(--brand-bg); /* [修正] 背景色需與 Body 一致才能遮住線條 */
     padding: 0 10px;
     text-align: center;
     color: #999;
     font-weight: 600;
+    transition: background-color 0.5s ease;
 }
 
 .step-item.active {
@@ -222,8 +274,14 @@ footer {
 }
 
 .check-list-group .list-group-item:hover {
-    background-color: #fff0f5; /* 懸停效果：極淡粉色 */
+    background-color: #f0f2f5; /* 通用淺灰懸停 */
 }
+
+/* 若有主題設定，懸停色可微調 (選用) */
+body.theme-spring .check-list-group .list-group-item:hover { background-color: #fff0f5; }
+body.theme-summer .check-list-group .list-group-item:hover { background-color: #e0f2f1; }
+body.theme-autumn .check-list-group .list-group-item:hover { background-color: #fff8e1; }
+body.theme-winter .check-list-group .list-group-item:hover { background-color: #eceff1; }
 
 .form-check-input:checked + .form-check-label {
     color: var(--theme-color, #0d6efd);
@@ -287,13 +345,19 @@ footer {
 
 /* 4.1 登入背景容器 */
 .login-main-content {
-    /* 配合全站的粉色漸層 */
-    background: linear-gradient(135deg, #fff0f5 0%, #e6e9f0 100%);
+    /* 預設: 淺灰漸層 */
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 20px;
 }
+
+/* 讓登入頁也能吃到主題色 */
+body.theme-spring .login-main-content { background: linear-gradient(135deg, #fff0f5 0%, #e6e9f0 100%); }
+body.theme-summer .login-main-content { background: linear-gradient(135deg, #e0f7fa 0%, #ffffff 100%); }
+body.theme-autumn .login-main-content { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); }
+body.theme-winter .login-main-content { background: linear-gradient(135deg, #eceff1 0%, #cfd8dc 100%); }
 
 /* 4.2 登入卡片 (.login-card) */
 .login-card {
@@ -312,6 +376,7 @@ footer {
     padding: 2rem;
     text-align: center;
     border-bottom: none;
+    transition: background-color 0.5s ease;
 }
 
 .login-btn {
@@ -321,11 +386,13 @@ footer {
     font-weight: 600;
     letter-spacing: 1px;
     color: white;
+    transition: background-color 0.5s ease;
 }
 
 .login-btn:hover {
-    background-color: #4a3b45;
+    background-color: #4a3b45; /* 預設 hover，各主題可微調，此處保留通用設定 */
     color: white;
+    opacity: 0.9;
 }
 
 /* 4.3 錯誤搖晃動畫 (.shake) */
