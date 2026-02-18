@@ -30,6 +30,11 @@
             width: 100%;
             max-width: 400px;
         }
+        /* [新增] 讓密碼切換按鈕在 focus 時不要有醜醜的框線，保持視覺一體性 */
+        #togglePassword:focus {
+            box-shadow: none;
+            border-color: #dee2e6; /* 維持原本邊框色 */
+        }
     </style>
 </head>
 <body>
@@ -65,20 +70,22 @@
                             <input type="email" class="form-control border-start-0 ps-0" id="email" placeholder="name@company.com" required>
                         </div>
                     </div>
+                    
                     <div class="mb-4">
                         <label for="password" class="form-label text-muted small fw-bold">密碼 (Password)</label>
                         <div class="input-group">
                             <span class="input-group-text bg-light border-end-0"><i class="fas fa-lock text-muted"></i></span>
-                            <input type="password" class="form-control border-start-0 ps-0" id="password" placeholder="請輸入密碼" required>
+                            <input type="password" class="form-control border-start-0 border-end-0 ps-0" id="password" placeholder="請輸入密碼" required>
+                            <button class="btn bg-white border border-start-0 text-muted" type="button" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="rememberMe">
-                            <label class="form-check-label small text-muted" for="rememberMe">記住我</label>
-                        </div>
+
+                    <div class="d-flex justify-content-end align-items-center mb-4">
                         <a href="#" class="text-decoration-none small text-muted" data-bs-toggle="modal" data-bs-target="#forgotModal">忘記密碼?</a>
                     </div>
+                    
                     <button type="submit" id="btn-login" class="btn btn-primary w-100 login-btn">登入系統</button>
                 </form>
             </div>
@@ -131,22 +138,7 @@
 
         // 2. 頁面載入時執行
         document.addEventListener('DOMContentLoaded', function() {
-            // [修正] 防呆機制：直接從 Config 讀取，並加上 console log 方便除錯
-            const configKey = window.AppConfig.StorageKeys && window.AppConfig.StorageKeys.SAVED_EMAIL;
-            // 如果 Config 真的讀不到，回退到預設字串
-            const savedKey = configKey || 'ohacss_saved_email';
-            
-            console.log('正在嘗試讀取記住我 Key:', savedKey); // 除錯用
-
-            const savedEmail = localStorage.getItem(savedKey);
-            
-            if (savedEmail) {
-                console.log('找到已儲存的 Email:', savedEmail); // 除錯用
-                document.getElementById('email').value = savedEmail;
-                document.getElementById('rememberMe').checked = true;
-            } else {
-                console.log('沒有找到已儲存的 Email'); // 除錯用
-            }
+            // [修改] 已移除記住我的讀取邏輯
 
             // 時鐘邏輯
             setInterval(() => {
@@ -161,6 +153,21 @@
                 const formattedDate = `${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()}(${days[now.getDay()]})`;
                 dateEl.innerHTML = `<i class="far fa-calendar-alt me-1"></i>今日是 ${formattedDate}`;
             }
+
+            // [新增] 密碼顯示/隱藏切換邏輯
+            const togglePasswordBtn = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+
+            togglePasswordBtn.addEventListener('click', function () {
+                // 切換 type 屬性
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                
+                // 切換圖示
+                const icon = this.querySelector('i');
+                icon.classList.toggle('fa-eye');
+                icon.classList.toggle('fa-eye-slash');
+            });
         });
 
         // 3. 登入邏輯
@@ -173,40 +180,27 @@
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>驗證中...';
 
-            // [修正 2] 移除 password.trim()，避免密碼含空白者無法登入
             const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value; 
-            const rememberMe = document.getElementById('rememberMe').checked;
+            const password = document.getElementById('password').value; // 密碼保留空白字元
+            // [修改] 已移除 rememberMe 變數
 
             try {
-                // 如果 Key 格式錯誤，這裡就會拋出 Error，導致下方 "setItem" 永遠跑不到
                 const { data: authData, error: authError } = await supabaseClient.auth.signInWithPassword({ email, password });
                 
                 if (authError) {
-                    console.error('Supabase Auth Error:', authError); // 顯示詳細錯誤
+                    console.error('Supabase Auth Error:', authError);
                     throw new Error('帳號或密碼錯誤');
                 }
 
                 const { data: profileData, error: profileError } = await supabaseClient.from('profiles').select('*').eq('id', authData.user.id).single();
                 if (profileError || !profileData) throw new Error('讀取使用者權限失敗');
 
-                // --- 登入成功後才會執行到這裡 ---
-                
+                // 儲存 Session
                 sessionStorage.setItem(window.AppConfig.StorageKeys.USER_ID, authData.user.id);
                 sessionStorage.setItem(window.AppConfig.StorageKeys.USER_ROLE, profileData.role || 'user');
                 sessionStorage.setItem(window.AppConfig.StorageKeys.USER_NAME, profileData.full_name || email);
 
-                // [修正] 寫入邏輯
-                const configKey = window.AppConfig.StorageKeys && window.AppConfig.StorageKeys.SAVED_EMAIL;
-                const savedKey = configKey || 'ohacss_saved_email';
-
-                if (rememberMe) {
-                    console.log('記住我勾選：正在寫入', savedKey, email); // 除錯用
-                    localStorage.setItem(savedKey, email);
-                } else {
-                    console.log('記住我未勾選：清除', savedKey); // 除錯用
-                    localStorage.removeItem(savedKey);
-                }
+                // [修改] 已移除記住我的寫入邏輯
 
                 btn.innerHTML = '<i class="fas fa-check me-2"></i>登入成功，跳轉中...';
                 setTimeout(() => window.location.href = window.AppConfig.Paths.DASHBOARD || 'dashboard.html', 500);
@@ -223,7 +217,7 @@
             }
         });
 
-        // 4. 忘記密碼發送 (邏輯不變)
+        // 4. 忘記密碼發送
         async function sendReset() {
             const email = document.getElementById('reset-email').value.trim();
             if (!email) return alert('請輸入 Email');
