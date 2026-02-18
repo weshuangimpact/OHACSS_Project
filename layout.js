@@ -29,6 +29,12 @@ document.addEventListener("DOMContentLoaded", () => {
 // 核心功能：權限檢查
 // ==========================================
 function checkAuth() {
+    // 允許略過權限檢查的頁面 (例如登入頁)
+    const currentPath = window.location.pathname;
+    if (currentPath.includes('index.html') || currentPath.endsWith('/')) {
+        return;
+    }
+
     const userId = sessionStorage.getItem(window.AppConfig.StorageKeys.USER_ID);
     
     // 若無 User ID，踢回登入頁
@@ -42,8 +48,10 @@ function checkAuth() {
 // 核心功能：渲染導覽列 (Navbar)
 // ==========================================
 function renderNavbar() {
+    // 如果頁面已有 Navbar (例如手寫的)，則不重複渲染
+    if (document.querySelector('nav.navbar')) return;
+
     // 判斷目前是否在儀表板 (決定是否顯示 "回到儀表板" 按鈕)
-    // 使用 config 定義的路徑，若無則預設 'dashboard.html'
     const dashboardPath = window.AppConfig.Paths.DASHBOARD || 'dashboard.html';
     const isDashboard = window.location.pathname.includes(dashboardPath);
     
@@ -51,6 +59,7 @@ function renderNavbar() {
     const userName = sessionStorage.getItem(window.AppConfig.StorageKeys.USER_NAME) || '使用者';
 
     // 根據頁面決定按鈕 HTML
+    // 若不是儀表板頁面，則顯示 "回到儀表板" 按鈕
     const backBtnHtml = isDashboard ? '' : `
         <a class="btn btn-outline-light btn-sm me-2" href="${dashboardPath}">
             <i class="fas fa-reply me-1"></i>回到儀表板
@@ -88,7 +97,7 @@ function renderNavbar() {
         </div>
     </nav>`;
 
-    // 插入到 Body 最上方
+    // 插入到 Body 最上方 (作為第一個子元素)
     document.body.insertAdjacentHTML("afterbegin", navbarHTML);
 }
 
@@ -96,6 +105,9 @@ function renderNavbar() {
 // 核心功能：渲染頁尾 (Footer)
 // ==========================================
 function renderFooter() {
+    // 如果頁面已有 Footer，則不重複渲染
+    if (document.querySelector('footer')) return;
+
     const companyInfo = `${window.AppConfig.System.COMPANY_NAME} ${window.AppConfig.System.TAX_ID}`;
     const slogan = window.AppConfig.System.SLOGAN;
 
@@ -147,7 +159,7 @@ window.logoutSystem = function() {
         // 清除所有 Session 資料
         sessionStorage.clear();
         // 清除 LocalStorage (若有使用的話，保險起見)
-        localStorage.clear();
+        // localStorage.clear(); // 視需求決定是否保留記住我資訊
         
         // [修正] 跳轉回登入頁 (index.html)
         // 優先讀取 Config 設定，若無則使用字串 'index.html'
