@@ -1,174 +1,361 @@
 /* ==========================================================================
-   style.css - 全站共用視覺規範 (四季自動變換版)
+   style.css - 全站共用視覺規範 (春日櫻花·純代碼生成版)
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   1. 基礎變數與預設值
+   1. 基礎重置與全域設定 (Global Reset)
    -------------------------------------------------------------------------- */
 :root {
-    /* 系統核心語意色 (PDCA 保持不變，確保專業識別度) */
-    --sys-plan: #0d6efd;
-    --sys-do:   #198754;
-    --sys-check:#ffc107;
-    --sys-act:  #dc3545;
+    /* --- [品牌色：春日櫻花主題] --- */
     
-    --main-font: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
-
-    /* --- [預設變數：春天/櫻花] (若 JS 失效時的預設值) --- */
-    --brand-dark: #5e4b56;        /* 深藕色 */
-    --brand-primary: #0d6efd;     /* 藍色按鈕 */
-    --brand-bg-color: #fff5f7;    /* 粉白底色 */
-    --card-border: #e6dce0;       /* 卡片邊框 */
-    --card-hover-bg: #fff0f5;     /* 列表懸停色 */
-}
-
-/* --------------------------------------------------------------------------
-   2. 四季主題定義 (Overrides) - 由 JS 自動切換 Class
-   -------------------------------------------------------------------------- */
-
-/* === 春 (Spring) === */
-body.theme-spring {
+    /* Header/Footer: 深紫藕色 (溫暖且專業) */
     --brand-dark: #5e4b56; 
-    --brand-bg-color: #fff5f7;
-    --card-border: #e6dce0;
-    --card-hover-bg: #fff0f5;
     
-    /* 背景：櫻花飄落 SVG */
-    background-image: 
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M30 10c-5-8-20-5-22 5s5 20 15 20 15 15 15 15s10-15 10-25-5-20-10-20-8 5-8 5z' fill='%23ffffff' fill-opacity='0.6' transform='rotate(15 30 30) scale(0.6)'/%3E%3Cpath d='M80 60c-5-8-20-5-22 5s5 20 15 20 15 15 15 15s10-15 10-25-5-20-10-20-8 5-8 5z' fill='%23ffffff' fill-opacity='0.4' transform='rotate(-30 80 80) scale(0.8)'/%3E%3C/svg%3E"),
-        radial-gradient(circle at 10% 20%, rgba(255, 230, 235, 0.7) 0%, rgba(255, 255, 255, 0) 50%);
-    background-size: 300px 300px, cover;
-    animation: bg-drift 60s linear infinite;
+    /* 主要按鈕: 維持 Bootstrap Primary Blue (確保操作辨識度) */
+    --brand-primary: #0d6efd;   
+
+    /* 網頁背景: 極淡的櫻花粉白 */
+    --brand-bg: #fff5f7;        
+    
+    /* 系統語意色 (PDCA) */
+    --sys-plan: #0d6efd;   /* Plan (藍) */
+    --sys-do:   #198754;   /* Do/Check (綠) */
+    --sys-check:#ffc107;   /* Evaluation (黃) */
+    --sys-act:  #dc3545;   /* Act (紅) */
+    
+    /* 預設字體 */
+    --main-font: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
 }
 
-/* === 夏 (Summer) === */
-body.theme-summer {
-    --brand-dark: #2c4c58;        /* 深湖水綠 */
-    --brand-bg-color: #f0f8ff;    /* 淡天藍色 */
-    --card-border: #d1e7dd;       /* 淡綠邊框 */
-    --card-hover-bg: #e0f7fa;     /* 列表懸停色 */
-
-    /* 背景：清涼氣泡 SVG */
-    background-image: 
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Ccircle cx='20' cy='20' r='5' fill='%23ffffff' fill-opacity='0.4'/%3E%3Ccircle cx='70' cy='80' r='8' fill='%23ffffff' fill-opacity='0.3'/%3E%3C/svg%3E"),
-        linear-gradient(135deg, #e0f7fa 0%, #ffffff 100%);
-    background-size: 200px 200px, cover;
-    animation: bg-drift-up 40s linear infinite; /* 氣泡向上浮 */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
-
-/* === 秋 (Autumn) === */
-body.theme-autumn {
-    --brand-dark: #5d4037;        /* 深褐色 */
-    --brand-bg-color: #fff8f0;    /* 暖米色 */
-    --card-border: #eee0d0;       /* 米黃邊框 */
-    --card-hover-bg: #fff3e0;     /* 列表懸停色 */
-
-    /* 背景：溫暖光暈 (無動態圖案，強調穩重) */
-    background-image: radial-gradient(circle at 80% 10%, rgba(255, 224, 178, 0.5) 0%, rgba(255, 255, 255, 0) 60%);
-    background-size: cover;
-    animation: none; 
-}
-
-/* === 冬 (Winter) === */
-body.theme-winter {
-    --brand-dark: #37474f;        /* 鐵灰色 */
-    --brand-bg-color: #f5f7fa;    /* 冷灰色 */
-    --card-border: #dee2e6;       /* 灰邊框 */
-    --card-hover-bg: #e2e6ea;     /* 列表懸停色 */
-
-    /* 背景：雪花飄落 SVG */
-    background-image: 
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='2' fill='%23ffffff' fill-opacity='0.8'/%3E%3Ccircle cx='20' cy='80' r='1.5' fill='%23ffffff' fill-opacity='0.6'/%3E%3C/svg%3E"),
-        linear-gradient(to bottom, #e3f2fd 0%, #ffffff 100%);
-    background-size: 400px 400px, cover;
-    animation: bg-drift 50s linear infinite;
-}
-
-/* --------------------------------------------------------------------------
-   3. 動畫與全域樣式
-   -------------------------------------------------------------------------- */
-@keyframes bg-drift {
-    from { background-position: 0 0, center; }
-    to   { background-position: 300px 600px, center; }
-}
-
-@keyframes bg-drift-up {
-    from { background-position: 0 600px, center; }
-    to   { background-position: 0 0, center; }
-}
-
-html, body { height: 100%; margin: 0; padding: 0; }
 
 body {
-    background-color: var(--brand-bg-color);
+    background-color: var(--brand-bg);
     font-family: var(--main-font);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+
+    /* --- [核心技術：純代碼生成櫻花背景] --- */
+    background-image: 
+        /* 第1層：SVG 櫻花花瓣 (Data URI) */
+        /* 這裡定義了兩個白色半透明的花瓣形狀，旋轉不同角度，無需外部圖片 */
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M30 10c-5-8-20-5-22 5s5 20 15 20 15 15 15 15s10-15 10-25-5-20-10-20-8 5-8 5z' fill='%23ffffff' fill-opacity='0.5' transform='rotate(15 30 30) scale(0.6)'/%3E%3Cpath d='M80 60c-5-8-20-5-22 5s5 20 15 20 15 15 15 15s10-15 10-25-5-20-10-20-8 5-8 5z' fill='%23ffffff' fill-opacity='0.3' transform='rotate(-30 80 80) scale(0.8)'/%3E%3C/svg%3E"),
+        
+        /* 第2層：粉色柔光漸層 (營造春天氛圍) */
+        radial-gradient(circle at 10% 20%, rgba(255, 230, 235, 0.7) 0%, rgba(255, 255, 255, 0) 50%);
+
+    /* 背景重複設定：花瓣重複鋪滿，漸層不重複 */
     background-repeat: repeat, no-repeat;
+
+    /* 背景位置：初始位置 */
+    background-position: 0 0, center;
+
+    /* 背景尺寸：花瓣圖案大小 (300px 確保在手機上也好看)，漸層撐滿全螢幕 */
+    background-size: 300px 300px, cover;
+
+    /* 背景固定：漸層固定不動，花瓣隨頁面捲動產生視差 (或可改為 fixed 讓花瓣也不動) */
     background-attachment: fixed, fixed;
-    transition: background 1s ease; /* 換季時有淡入淡出效果 */
+
+    /* --- [動態效果] 讓花瓣緩慢飄動 --- */
+    /* 注意：這會讓花瓣背景無限循環移動，營造「飄落/流動」感 */
+    animation: sakura-drift 60s linear infinite;
+}
+
+/* 定義花瓣飄動動畫 */
+@keyframes sakura-drift {
+    from { background-position: 0 0, center; }
+    to   { background-position: 300px 600px, center; } /* 數值對應 background-size 的倍數以確保無縫 */
+}
+
+/* 讓主要內容區塊自動撐開 */
+.main-content, .container, .container-fluid {
+    flex: 1;
+    width: 100%;
+    position: relative; /* 確保內容在背景之上 */
+    z-index: 1;
 }
 
 /* --------------------------------------------------------------------------
-   4. 元件樣式 (使用變數)
+   2. 共用版型元件
    -------------------------------------------------------------------------- */
-.main-content, .container, .container-fluid { flex: 1; width: 100%; position: relative; z-index: 1; }
 
+/* 2.1 導覽列 (Navbar) */
 .navbar {
     background-color: var(--brand-dark) !important;
-    min-height: 85px; color: #fff; flex-shrink: 0;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 10;
+    min-height: 85px;
+    color: #fff;
+    flex-shrink: 0;
+    box-shadow: 0 2px 10px rgba(94, 75, 86, 0.2);
+    z-index: 10;
 }
 
+/* 2.2 頁尾 (Footer) */
 footer {
     background-color: var(--brand-dark) !important;
-    color: #fff; flex-shrink: 0; font-size: 0.9rem; letter-spacing: 0.5px;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    margin-top: auto; padding: 15px 0; min-height: 85px; z-index: 10;
+    color: #fff;
+    flex-shrink: 0;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto;
+    padding: 15px 0;
+    min-height: 85px;
+    z-index: 10;
 }
 
-/* 卡片與區塊 */
-.instruction-box, .card, .info-card, .record-card {
+/* --------------------------------------------------------------------------
+   3. 內頁專用樣式
+   -------------------------------------------------------------------------- */
+
+/* 卡片與說明區塊 (統一修正外框與陰影) */
+.instruction-box, 
+.card,
+.info-card,
+.record-card {
     background-color: #fff;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08) !important; 
-    border: 1px solid var(--card-border) !important; 
+    /* 陰影帶粉色光暈 */
+    box-shadow: 0 4px 15px rgba(255, 182, 193, 0.25) !important; 
+    /* 邊框：淡粉灰色 */
+    border: 1px solid #e6dce0 !important; 
 }
 
-/* 登入頁樣式 */
+/* 覆寫部分卡片特定設定 */
+.instruction-box {
+    border-left: 5px solid var(--theme-color, #0d6efd) !important;
+    padding: 20px 25px;
+    border-radius: 4px;
+    margin-bottom: 30px;
+    width: 100%;
+    text-align: left;
+}
+
+.instruction-title {
+    color: var(--theme-color, #0d6efd);
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+/* 3.2 步驟指示器 (.step-indicator) */
+.step-indicator {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    position: relative;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.step-indicator::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #e0e0e0;
+    z-index: 0;
+}
+
+.step-item {
+    position: relative;
+    z-index: 1;
+    /* 背景色設為透明或與 body 漸層相容的顏色，這裡用淡粉色遮擋線條 */
+    background: #fff5f7; 
+    padding: 0 10px;
+    text-align: center;
+    color: #999;
+    font-weight: 600;
+}
+
+.step-item.active {
+    color: var(--theme-color, #0d6efd);
+}
+
+.step-circle {
+    width: 32px;
+    height: 32px;
+    background: #e0e0e0;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 8px;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.step-item.active .step-circle {
+    background: var(--theme-color, #0d6efd);
+    box-shadow: 0 0 0 5px rgba(13, 110, 253, 0.2);
+}
+
+.step-item.completed .step-circle {
+    background: #198754;
+}
+
+/* 3.3 紀錄卡片 (.record-card) */
+.record-card {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.record-card:hover, .record-card.selected {
+    border-color: var(--theme-color, #0d6efd) !important;
+    background-color: var(--theme-light, #e7f1ff);
+}
+
+/* 3.4 檢查清單 (.check-list-group) */
+.check-list-group .list-group-item {
+    border: 1px solid #eee;
+    margin-bottom: 8px;
+    border-radius: 6px !important;
+    transition: background 0.2s;
+    padding: 12px 15px;
+}
+
+.check-list-group .list-group-item:hover {
+    background-color: #fff0f5; /* 懸停效果：極淡粉色 */
+}
+
+.form-check-input:checked + .form-check-label {
+    color: var(--theme-color, #0d6efd);
+    font-weight: bold;
+}
+
+/* 3.5 項目操作按鈕 (.item-actions) */
+.item-actions {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.item-actions.visible {
+    display: flex;
+}
+
+/* 3.6 備註與歷程 */
+.remark-box {
+    border: 2px dashed #cbd5e1;
+    background-color: #f8fafc;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.review-history-item {
+    border-left: 4px solid #ffc107;
+    background-color: #fff9e6;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+.improvement-history-item {
+    border-left: 4px solid #198754;
+    background-color: #f0fff4;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+.review-meta {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.section-title {
+    border-left: 5px solid var(--theme-color, #0d6efd);
+    padding-left: 15px;
+    margin-bottom: 20px;
+}
+
+/* --------------------------------------------------------------------------
+   4. 登入頁專用樣式 (Login Page Specific)
+   -------------------------------------------------------------------------- */
+
+/* 4.1 登入背景容器 */
 .login-main-content {
-    /* 讓登入頁背景穿透 body 的設定，這裡改為透明 */
-    background: transparent; 
-    display: flex; align-items: center; justify-content: center; padding: 20px;
+    /* 配合全站的粉色漸層 */
+    background: linear-gradient(135deg, #fff0f5 0%, #e6e9f0 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
 }
-.login-card .card-header { background-color: var(--brand-dark); color: white; padding: 2rem; text-align: center; border-bottom: none; }
-.login-btn { background-color: var(--brand-dark); border: none; padding: 10px; font-weight: 600; letter-spacing: 1px; color: white; }
-.login-btn:hover { opacity: 0.9; color: white; }
 
-/* 其他輔助樣式保持不變... */
-.instruction-box { border-left: 5px solid var(--theme-color, #0d6efd) !important; padding: 20px 25px; border-radius: 4px; margin-bottom: 30px; width: 100%; text-align: left; }
-.instruction-title { color: var(--theme-color, #0d6efd); font-weight: 700; margin-bottom: 10px; }
-.step-indicator { display: flex; justify-content: space-between; margin-bottom: 30px; position: relative; max-width: 600px; margin-left: auto; margin-right: auto;}
-.step-indicator::before { content: ''; position: absolute; top: 15px; left: 0; right: 0; height: 2px; background: #e0e0e0; z-index: 0; }
-.step-item { position: relative; z-index: 1; background: var(--brand-bg-color); /* 跟隨背景變色 */ padding: 0 10px; text-align: center; color: #999; font-weight: 600; }
-.step-item.active { color: var(--theme-color, #0d6efd); }
-.step-circle { width: 32px; height: 32px; background: #e0e0e0; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; font-weight: bold; transition: all 0.3s; }
-.step-item.active .step-circle { background: var(--theme-color, #0d6efd); box-shadow: 0 0 0 5px rgba(13, 110, 253, 0.2); }
-.step-item.completed .step-circle { background: #198754; }
-.record-card { cursor: pointer; transition: all 0.2s; }
-.record-card:hover, .record-card.selected { border-color: var(--theme-color, #0d6efd) !important; background-color: var(--theme-light, #e7f1ff); }
-.check-list-group .list-group-item { border: 1px solid #eee; margin-bottom: 8px; border-radius: 6px !important; transition: background 0.2s; padding: 12px 15px; }
-.check-list-group .list-group-item:hover { background-color: var(--card-hover-bg); }
-.form-check-input:checked + .form-check-label { color: var(--theme-color, #0d6efd); font-weight: bold; }
-.item-actions { display: none; align-items: center; gap: 8px; margin-left: auto; }
-.item-actions.visible { display: flex; }
-.remark-box { border: 2px dashed #cbd5e1; background-color: #f8fafc; border-radius: 6px; padding: 15px; margin-bottom: 20px; }
-.review-history-item { border-left: 4px solid #ffc107; background-color: #fff9e6; padding: 15px; margin-bottom: 15px; border-radius: 4px; }
-.improvement-history-item { border-left: 4px solid #198754; background-color: #f0fff4; padding: 15px; margin-bottom: 15px; border-radius: 4px; }
-.review-meta { font-size: 0.85rem; color: #666; margin-bottom: 5px; display: flex; justify-content: space-between; }
-.section-title { border-left: 5px solid var(--theme-color, #0d6efd); padding-left: 15px; margin-bottom: 20px; }
-.login-card { overflow: hidden; background-color: #fff; }
-.shake { animation: shake 0.5s; }
-@keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
-.cursor-pointer { cursor: pointer; }
-.fw-bold-600 { font-weight: 600; }
+/* 4.2 登入卡片 (.login-card) */
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.login-card .card-header {
+    background-color: var(--brand-dark);
+    color: white;
+    padding: 2rem;
+    text-align: center;
+    border-bottom: none;
+}
+
+.login-btn {
+    background-color: var(--brand-dark);
+    border: none;
+    padding: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: white;
+}
+
+.login-btn:hover {
+    background-color: #4a3b45;
+    color: white;
+}
+
+/* 4.3 錯誤搖晃動畫 (.shake) */
+.shake {
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+/* --------------------------------------------------------------------------
+   5. 工具類 (Utilities)
+   -------------------------------------------------------------------------- */
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.fw-bold-600 {
+    font-weight: 600;
+}
