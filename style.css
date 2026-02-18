@@ -43,7 +43,7 @@ body {
     /* --- [背景設定：使用真實圖片路徑] --- */
     background-image: 
         /* 第1層：真實櫻花圖片 (請確保該路徑下的 SVG 為白色半透明) */
-        url('OHACSS_Project/sakura.svg'),
+        url('sakura.svg'),
         
         /* 第2層：粉色柔光漸層 (營造春天氛圍) */
         radial-gradient(circle at 10% 20%, rgba(255, 230, 235, 0.7) 0%, rgba(255, 255, 255, 0) 50%);
