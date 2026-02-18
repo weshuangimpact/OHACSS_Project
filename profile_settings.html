@@ -3,44 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>重設密碼 | OHACSS</title>
+    <title>個人設定 | OHACSS</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
+    <script src="config.js"></script>
+    
+    <script src="layout.js"></script>
+
     <link href="style.css" rel="stylesheet">
     
     <style>
         :root {
-            /* 定義本頁主題色：灰色 (對應 Profile Settings) */
-            --theme-color: #6c757d;
+            /* 定義本頁主題色：灰色 (代表設定/工具) */
+            --page-theme-color: #6c757d;
         }
 
         /* 覆寫字卡與元件的主題色 */
         .instruction-title {
-            color: var(--theme-color);
+            color: var(--page-theme-color);
         }
         
-        /* 重設密碼卡片設定 */
-        .reset-card {
+        /* 設定卡片通用樣式 */
+        .settings-card {
             border: none;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             background-color: #fff; 
             overflow: hidden;
             height: 100%;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        
+        .settings-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
         }
 
         .card-header {
-            background-color: var(--theme-color);
+            background-color: var(--page-theme-color);
             color: white; 
-            padding: 1.5rem; 
-            text-align: center;
+            padding: 1rem 1.5rem; 
+            font-weight: bold;
             border-bottom: none;
+            display: flex;
+            align-items: center;
         }
 
-        .form-control:focus { 
-            border-color: var(--theme-color);
+        .form-control:focus, .form-select:focus { 
+            border-color: var(--page-theme-color);
             box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25); 
         }
         
@@ -58,8 +71,8 @@
         
         /* 按鈕樣式 */
         .btn-theme {
-            background-color: var(--theme-color);
-            border-color: var(--theme-color);
+            background-color: var(--page-theme-color);
+            border-color: var(--page-theme-color);
             color: white;
             font-weight: bold;
         }
@@ -68,6 +81,22 @@
             border-color: #545b62;
             color: white;
         }
+
+        /* 主題預覽區塊 */
+        .theme-preview-box {
+            height: 100px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 2px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: #666;
+            background-size: cover;
+            background-position: center;
+            transition: all 0.5s ease;
+        }
     </style>
 </head>
 <body>
@@ -75,26 +104,60 @@
     <div class="container-fluid px-4 mt-4 pb-5 main-content">
         
         <div class="mb-4">
-            <h2 class="fw-bold text-dark mb-1">個人密碼管理</h2>
-            <p class="text-secondary mb-0">Profile Settings 階段：帳號安全與登入憑證維護</p>
+            <h2 class="fw-bold text-dark mb-1">個人設定 (Profile Settings)</h2>
+            <p class="text-secondary mb-0">管理您的帳號安全與系統外觀偏好</p>
         </div>
 
         <div class="instruction-box">
             <div class="instruction-title">
-                <i class="fas fa-user-shield me-2"></i>5W1H 設計理念：Security (安全)
+                <i class="fas fa-sliders-h me-2"></i>5W1H 設計理念：Personalization & Security
             </div>
             <p class="mb-0 text-dark" style="line-height: 1.6;">
-                透過嚴謹的身分驗證機制(Who)，確保只有授權使用者能在特定時間(When)修改其登入憑證(What)，以落實系統存取控制與資料安全政策(Why)。
+                本模組整合了<strong>帳號安全 (Security)</strong> 與 <strong>個人化體驗 (Personalization)</strong>。除了確保使用者能定期維護登入憑證外，亦提供適應不同季節或偏好的視覺主題切換功能，以提升長時間操作系統的舒適度與滿意度。
             </p>
         </div>
 
-        <div class="row justify-content-center">
-            <div class="col-lg-6 col-md-8">
-                <div class="card reset-card">
-                    <div class="card-header">
-                        <h5 class="mb-0 fw-bold"><i class="fas fa-key me-2"></i>重設/修改密碼</h5>
+        <div class="row justify-content-center g-4">
+            
+            <div class="col-lg-5 col-md-6">
+                <div class="card settings-card">
+                    <div class="card-header bg-primary text-white">
+                        <i class="fas fa-palette me-2"></i>系統外觀主題
                     </div>
-                    <div class="card-body p-4 p-md-5">
+                    <div class="card-body p-4">
+                        <p class="text-muted small mb-3">請選擇您喜歡的系統背景風格，設定將自動儲存。</p>
+                        
+                        <div class="theme-preview-box" id="theme-preview">
+                            <span class="bg-white px-2 py-1 rounded opacity-75">預覽區域</span>
+                        </div>
+
+                        <form id="themeForm">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small">選擇主題</label>
+                                <select class="form-select" id="theme-select" onchange="previewTheme()">
+                                    <option value="default">🔳 極簡黑白 (Black & White)</option>
+                                    <option value="theme-spring">🌸 春日櫻花 (Spring Sakura)</option>
+                                    <option value="theme-summer">☀️ 盛夏藍天 (Summer Breeze)</option>
+                                    <option value="theme-autumn">🍁 秋意楓紅 (Autumn Maple)</option>
+                                    <option value="theme-winter">❄️ 冬夜冰雪 (Winter Snow)</option>
+                                </select>
+                            </div>
+                            <div class="d-grid">
+                                <button type="button" class="btn btn-outline-primary" onclick="saveThemeSettings()">
+                                    <i class="fas fa-check me-2"></i>套用並儲存設定
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5 col-md-6">
+                <div class="card settings-card">
+                    <div class="card-header">
+                        <i class="fas fa-key me-2"></i>重設/修改密碼
+                    </div>
+                    <div class="card-body p-4">
                         
                         <div id="auth-status" class="status-waiting">
                             <i class="fas fa-spinner fa-spin me-2"></i>正在驗證身分權限...
@@ -119,13 +182,14 @@
 
                             <div class="d-grid">
                                 <button type="submit" id="submit-btn" class="btn btn-theme py-2" disabled>
-                                    <i class="fas fa-save me-2"></i>確認修改
+                                    <i class="fas fa-save me-2"></i>確認修改密碼
                                 </button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
+
         </div>
 
     </div>
@@ -133,34 +197,86 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="config.js"></script>
-    
-    <script src="layout.js"></script>
-
     <script>
-        // 初始化 Supabase (使用 Config)
-        if (typeof window.AppConfig === 'undefined') {
-            console.error('Config not loaded!');
-        }
-
+        // 初始化 Supabase
         const supabaseClient = window.supabase.createClient(
             window.AppConfig.Supabase.URL, 
             window.AppConfig.Supabase.KEY
         );
 
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. 初始化主題選單
+            loadSavedTheme();
+            
+            // 2. 驗證使用者身分 (密碼功能用)
+            checkUserSession();
+        });
+
+        // ==========================================
+        // 功能一：主題設定 (Theme Settings)
+        // ==========================================
+        
+        function loadSavedTheme() {
+            // 讀取 localStorage
+            const savedTheme = localStorage.getItem('user_theme_pref') || 'default';
+            const select = document.getElementById('theme-select');
+            
+            // 設定選單值
+            select.value = savedTheme;
+            
+            // 執行一次預覽，確保畫面同步
+            previewTheme();
+        }
+
+        function previewTheme() {
+            const selectedTheme = document.getElementById('theme-select').value;
+            const body = document.body;
+            const previewBox = document.getElementById('theme-preview');
+
+            // 1. 即時套用至 body (讓使用者看到全站效果)
+            // 先移除所有可能的主題 Class
+            body.classList.remove('theme-spring', 'theme-summer', 'theme-autumn', 'theme-winter');
+            
+            // 若非預設黑白，則加上對應 Class
+            if (selectedTheme !== 'default') {
+                body.classList.add(selectedTheme);
+            }
+
+            // 2. 更新預覽小區塊的樣式 (模擬背景)
+            // 為了讓預覽區塊也能顯示背景圖，我們將 computed style 複製過來
+            // 稍微延遲一下確保 CSS Class 生效
+            setTimeout(() => {
+                const computedStyle = window.getComputedStyle(body);
+                previewBox.style.backgroundImage = computedStyle.backgroundImage;
+                previewBox.style.backgroundColor = computedStyle.backgroundColor;
+                previewBox.style.backgroundSize = "100px 100px, cover"; // 預覽區塊縮小圖案
+            }, 50);
+        }
+
+        function saveThemeSettings() {
+            const selectedTheme = document.getElementById('theme-select').value;
+            
+            // 寫入 localStorage
+            localStorage.setItem('user_theme_pref', selectedTheme);
+            
+            // 視覺回饋
+            alert('✅ 主題設定已儲存！\n系統將記住您的選擇，下次登入時自動套用。');
+        }
+
+        // ==========================================
+        // 功能二：密碼重設 (Password Reset)
+        // ==========================================
+        
         const statusEl = document.getElementById('auth-status');
         const submitBtn = document.getElementById('submit-btn');
         const input1 = document.getElementById('new-password');
         const input2 = document.getElementById('confirm-password');
 
-        // 注意：Layout.js 的 checkAuth() 已確保了 sessionStorage 中有 UserID。
-        // 但為了取得更詳細的 Auth 資訊 (如 email) 用於顯示，這裡保留 onAuthStateChange 邏輯。
-        // 當使用者已登入時，此事件會立即觸發。
+        async function checkUserSession() {
+            // 嚴格檢查身分：只有在確認 Session 存在後，才解鎖表單
+            const { data } = await supabaseClient.auth.getSession();
+            const session = data.session;
 
-        // 1. 嚴格檢查身分：只有在確認 Session 存在後，才解鎖表單
-        supabaseClient.auth.onAuthStateChange(async (event, session) => {
-            console.log('Auth Event:', event);
-            
             if (session) {
                 // 成功抓到使用者
                 statusEl.className = 'status-ok';
@@ -171,19 +287,13 @@
                 input1.disabled = false;
                 input2.disabled = false;
             } else {
-                // 雖然 layout.js 會擋未登入者，但雙重保險 (或處理 Session 過期)
-                setTimeout(async () => {
-                    const { data } = await supabaseClient.auth.getSession();
-                    if (!data.session) {
-                        statusEl.className = 'status-error';
-                        statusEl.innerHTML = `<i class="fas fa-exclamation-triangle me-2"></i>連結已失效或過期，請重新登入。`;
-                        // 保持鎖定
-                    }
-                }, 1000);
+                // 未登入或 Session 過期
+                statusEl.className = 'status-error';
+                statusEl.innerHTML = `<i class="fas fa-exclamation-triangle me-2"></i>無法驗證身分，請重新登入。`;
             }
-        });
+        }
 
-        // 2. 表單送出
+        // 表單送出監聽
         document.getElementById('resetForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -204,11 +314,11 @@
                 
                 // 3. 徹底清除並登出
                 await supabaseClient.auth.signOut();
-                localStorage.clear();
+                localStorage.clear(); // 清除包含主題設定的所有快取 (選擇性，若想保留主題可改用 removeItem)
                 sessionStorage.clear();
                 
-                // 跳轉回登入頁 (使用 Config 路徑)
-                window.location.href = window.AppConfig.Paths.LOGIN || 'login.html';
+                // 跳轉回登入頁
+                window.location.href = window.AppConfig.Paths.LOGIN || 'index.html';
 
             } catch (err) {
                 console.error(err);
