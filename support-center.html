@@ -167,6 +167,19 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="card border-0 shadow-sm mt-4 bg-light">
+                    <div class="card-body">
+                        <h6 class="fw-bold mb-3"><i class="fas fa-file-alt me-2 text-secondary"></i>系統文件</h6>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-outline-secondary text-start btn-sm" data-bs-toggle="modal" data-bs-target="#manualModal">
+                                <i class="fas fa-book me-2 text-pink"></i>
+                                <span class="fw-bold text-dark">操作說明書：OHACSS 系統操作手冊 v1.0</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -455,6 +468,101 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="manualModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title fw-bold">
+                        <i class="fas fa-book-reader me-2 text-pink"></i>OHACSS 操作說明書 v1.0
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    
+                    <div class="mb-5 border-bottom pb-4">
+                        <h4 class="fw-bold text-dark mb-3">第一章：系統基礎建置與權限管理 (System Setup)</h4>
+                        <p class="text-muted small mb-3">本章節涵蓋系統上線初期的核心作業，包含建立 5W1H 基礎資料庫以及設定使用者帳號與權限。</p>
+                        
+                        <h5 class="fw-bold fs-6 mt-4 mb-2 text-primary">1.1 基本資料建立 (Master Data)</h5>
+                        <ul class="text-muted small list-unstyled ps-2">
+                            <li class="mb-2"><strong>● 客戶公司主檔：</strong>建立服務對象，系統自動建立「全廠」作業場所。</li>
+                            <li class="mb-2"><strong>● 醫護/顧問名單：</strong>建立人員檔案，區分顧問、管理員、文管人員。</li>
+                            <li class="mb-2"><strong>● 服務執行歷程：</strong>建立年度服務母案，作為後續執行的掛載點。</li>
+                            <li class="mb-2"><strong>● 計畫管理：</strong>上傳年度三大法定計畫文件 (職安衛、風險評估、教育訓練)。</li>
+                        </ul>
+
+                        <h5 class="fw-bold fs-6 mt-4 mb-2 text-primary">1.2 帳號權限管理 (Admin Only)</h5>
+                        <ul class="text-muted small list-unstyled ps-2">
+                            <li class="mb-2"><strong>● 啟用帳號：</strong>將人員名單開通為登入帳號，綁定 Email 與權限。</li>
+                            <li class="mb-2"><strong>● 權限角色：</strong>
+                                <br>- 管理員 (Admin)：最高權限，可刪除資料。
+                                <br>- 顧問 (Consultant)：僅能編輯自己負責的案件。
+                                <br>- 文管人員 (Doc_control)：協助資料輸入。
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-5 border-bottom pb-4">
+                        <h4 class="fw-bold text-dark mb-3">第二章：核心作業與 PDCA 循環 (Core Operation)</h4>
+                        <p class="text-muted small mb-3">說明顧問執行(Do)、管理審查(Check)與改善(Act)的完整流程。</p>
+
+                        <h5 class="fw-bold fs-6 mt-4 mb-2 text-success">2.1 服務執行歷程管理 (Plan & Do)</h5>
+                        <p class="text-muted small">顧問專用，用於上傳臨場服務紀錄。</p>
+                        <ul class="text-muted small list-unstyled ps-2">
+                            <li class="mb-1">1. 選擇母案 (可新增或修改退回案件)。</li>
+                            <li class="mb-1">2. 填寫日期、時間與服務類別。</li>
+                            <li class="mb-1">3. 勾選 A~P 執行項目並上傳 PDF 佐證，或使用 Q 項上傳其他附件。</li>
+                            <li class="mb-1">4. 點擊「存檔送審」，案件狀態轉為 Pending。</li>
+                        </ul>
+
+                        <h5 class="fw-bold fs-6 mt-4 mb-2 text-success">2.2 管理者總覽 (Check & Act)</h5>
+                        <p class="text-muted small">管理員專用，進行品質審查。</p>
+                        <ul class="text-muted small list-unstyled ps-2">
+                            <li class="mb-1"><strong>● 預覽審核：</strong>檢視案件詳情與附件。</li>
+                            <li class="mb-1"><strong>● 審查通知：</strong>退回補件 (Correction Requested)。</li>
+                            <li class="mb-1"><strong>● 核定結案：</strong>系統自動合併附件為 PDF 證據檔並封存 (Approved)。</li>
+                        </ul>
+
+                        <h5 class="fw-bold fs-6 mt-4 mb-2 text-success">2.3 評鑑支援 AI 智慧助理</h5>
+                        <p class="text-muted small">模擬搜尋引擎，提供評鑑委員快速調閱歷史證據，並可生成完整評鑑報告。</p>
+                    </div>
+
+                    <div class="mb-5 border-bottom pb-4">
+                        <h4 class="fw-bold text-dark mb-3">第三章：個人化與支援 (Personal & Support)</h4>
+                        
+                        <h5 class="fw-bold fs-6 mt-4 mb-2 text-info">3.1 個人設定</h5>
+                        <ul class="text-muted small list-unstyled ps-2">
+                            <li class="mb-1"><strong>● 系統主題：</strong>切換四季風格 (春櫻、夏藍、秋楓、冬雪)。</li>
+                            <li class="mb-1"><strong>● 密碼重設：</strong>定期更換登入密碼以保安全。</li>
+                        </ul>
+
+                        <h5 class="fw-bold fs-6 mt-4 mb-2 text-info">3.2 線上客服中心</h5>
+                        <p class="text-muted small">提供線上即時對談 (Live Chat)、緊急專線與問題回報信箱。</p>
+                    </div>
+
+                    <div class="mb-5 border-bottom pb-4">
+                        <h4 class="fw-bold text-dark mb-3">第四章：系統維護與稽核 (Maintenance & Audit)</h4>
+                        
+                        <h5 class="fw-bold fs-6 mt-4 mb-2 text-secondary">4.1 評鑑改善專區 (Act)</h5>
+                        <p class="text-muted small">針對外部評鑑缺失進行回覆，上傳改善佐證，形成持續改善迴圈。</p>
+
+                        <h5 class="fw-bold fs-6 mt-4 mb-2 text-secondary">4.2 系統日誌與稽核證據</h5>
+                        <p class="text-muted small">記錄所有資料異動 (Who, When, What, Where)，確保不可否認性，支援資安稽核。</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <h4 class="fw-bold text-dark mb-3">第五章：系統安全 (Security)</h4>
+                        <p class="text-muted small">包含登入機制、TLS 加密傳輸、密碼複雜度要求與忘記密碼處理流程。</p>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
                 </div>
             </div>
         </div>
