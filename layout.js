@@ -1,6 +1,6 @@
 /**
  * layout.js
- * 目的：負責內頁 (Dashboard 與 功能頁) 的共用版型渲染、權限檢查與主題載入
+ * 目的：負責內頁 (Dashboard 與 功能頁) 的共用版型渲染、權限檢查與【主題自動載入】
  * 依賴：必須先載入 config.js
  */
 
@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    // 2. [新增] 主題載入 (含登入頁強制黑白邏輯)
+    // 2. [關鍵] 優先載入主題 (讓背景圖與動畫生效)
     initTheme();
 
     // 3. 權限檢查 (Gatekeeper)
@@ -29,30 +29,31 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ==========================================
-// [新增] 核心功能：主題載入與管理
+// [核心] 主題載入與管理 (控制 CSS Class)
 // ==========================================
 function initTheme() {
     const body = document.body;
     const currentPath = window.location.pathname;
     
-    // 定義登入頁面路徑特徵 (根據您的設定)
-    // 通常是 index.html, login.html 或是根路徑 /
+    // 定義登入頁面路徑特徵
+    // 若檔名包含 index.html, login.html 或是根路徑 /
     const isLoginPage = currentPath.includes('index.html') || 
                         currentPath.includes('login.html') || 
                         currentPath.endsWith('/');
 
-    // 策略 A：如果是登入頁 -> 強制黑白 (不載入任何主題)
+    // 策略 A：如果是登入頁 -> 強制黑白 (不載入任何主題 Class)
     if (isLoginPage) {
-        // 移除所有可能殘留的主題 Class，確保回到 CSS :root 的預設黑白樣式
+        // 移除所有可能殘留的主題 Class，確保回到 style.css :root 的預設黑白樣式
         body.classList.remove('theme-spring', 'theme-summer', 'theme-autumn', 'theme-winter');
         console.log('[System] Login Page detected: Enforcing Default Theme (B&W).');
-        return; // 直接結束，不讀取 localStorage
+        return; // 結束函式，不讀取使用者設定
     }
 
     // 策略 B：如果是內部頁面 -> 讀取使用者設定
     const savedTheme = localStorage.getItem('user_theme_pref') || 'default';
 
-    // 若使用者有設定特定主題 (非 default)，則套用
+    // 若使用者有設定特定主題 (非 default)，則加上該 Class
+    // 這一步會觸發 style.css 中 body.theme-xxx 的背景圖與動畫
     if (savedTheme !== 'default') {
         body.classList.add(savedTheme);
         console.log(`[System] User Theme Applied: ${savedTheme}`);
@@ -60,10 +61,10 @@ function initTheme() {
 }
 
 // ==========================================
-// 核心功能：權限檢查
+// 權限檢查
 // ==========================================
 function checkAuth() {
-    // 允許略過權限檢查的頁面
+    // 允許略過權限檢查的頁面 (例如登入頁)
     const currentPath = window.location.pathname;
     if (currentPath.includes('index.html') || currentPath.endsWith('/')) {
         return;
@@ -78,11 +79,10 @@ function checkAuth() {
 }
 
 // ==========================================
-// 核心功能：渲染導覽列 (Navbar)
+// 渲染導覽列 (Navbar)
 // ==========================================
 function renderNavbar() {
-    // 登入頁通常不需要 Navbar，這裡做個簡單防呆
-    // 如果您希望登入頁也有 Navbar 但樣式不同，可在此修改，目前維持若有手寫nav則不渲染
+    // 如果頁面已有 Navbar (例如手寫的)，則不重複渲染
     if (document.querySelector('nav.navbar')) return;
 
     const dashboardPath = window.AppConfig.Paths.DASHBOARD || 'dashboard.html';
@@ -125,7 +125,7 @@ function renderNavbar() {
 }
 
 // ==========================================
-// 核心功能：渲染頁尾 (Footer)
+// 渲染頁尾 (Footer)
 // ==========================================
 function renderFooter() {
     if (document.querySelector('footer')) return;
@@ -145,7 +145,7 @@ function renderFooter() {
 }
 
 // ==========================================
-// 輔助功能：時鐘與日期
+// 時鐘與日期
 // ==========================================
 function initHeaderTime() {
     const dateEl = document.getElementById('header-date');
@@ -168,12 +168,12 @@ function initHeaderTime() {
 }
 
 // ==========================================
-// 全域功能：登出系統
+// 登出系統
 // ==========================================
 window.logoutSystem = function() {
     if (confirm('確定要登出系統嗎？')) {
         sessionStorage.clear();
-        // localStorage.clear(); // 建議保留 LocalStorage，這樣"記住我"或"主題設定"才不會被清掉
+        // localStorage.clear(); // 保留，這樣下次登入還記得主題
         window.location.href = window.AppConfig.Paths.LOGIN || 'index.html';
     }
 };
