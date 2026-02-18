@@ -1,5 +1,5 @@
 /* ==========================================================================
-   style.css - 全站共用視覺規範 (五大主題版)
+   style.css - 全站共用視覺規範 (五大主題完整版)
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
@@ -12,7 +12,8 @@
     --sys-check:#ffc107;   /* Evaluation (黃) */
     --sys-act:  #dc3545;   /* Act (紅) */
     
-    /* --- 預設品牌色 (黑白主題) --- */
+    /* --- 預設品牌色 (黑白主題 - Default) --- */
+    /* 若 body 沒有任何 theme class，就會使用這組設定 */
     --brand-dark: #202124;      /* Header/Footer: 純黑 */
     --brand-primary: #0d6efd;   /* 按鈕: 藍色 */
     --brand-bg: #ffffff;        /* 背景: 純白 */
@@ -35,18 +36,18 @@ body {
     flex-direction: column;
     min-height: 100vh;
     
-    /* 背景圖設定 (預設無) */
+    /* 背景圖設定 (預設無背景圖，僅純色) */
     background-repeat: repeat, no-repeat;
     background-position: 0 0, center;
     background-attachment: fixed, fixed;
     
-    /* 主題切換時的過場動畫 */
+    /* 主題切換時的過場動畫 (讓切換更滑順) */
     transition: background-color 0.5s ease, background-image 0.5s ease;
 }
 
 /* --------------------------------------------------------------------------
    2. 四季主題定義 (Themes)
-   說明：未來在 profile_settings 設定後，由 JS 在 body 加上對應 class
+   說明：由 JS (layout.js) 根據 profile_settings 讀取設定後，在 body 加上對應 class
    -------------------------------------------------------------------------- */
 
 /* === 春 (Spring) - 櫻花主題 === */
@@ -73,7 +74,8 @@ body.theme-summer {
         url('OHACSS_Project/theme/summer-sun.svg'),
         linear-gradient(180deg, #b3e5fc 0%, #ffffff 80%); /* 藍天漸層 */
     
-    background-size: 400px 400px, cover;
+    /* 夏天圖案較大，氣勢較強 */
+    background-size: 400px 400px, cover; 
     animation: theme-float-up 40s linear infinite; /* 太陽/雲朵緩慢上升 */
 }
 
@@ -353,7 +355,7 @@ body.theme-winter .check-list-group .list-group-item:hover { background-color: #
     padding: 20px;
 }
 
-/* 讓登入頁也能吃到主題色 */
+/* 讓登入頁也能吃到主題色 (若未來需要登入頁也變色，此處保留擴充性) */
 body.theme-spring .login-main-content { background: linear-gradient(135deg, #fff0f5 0%, #e6e9f0 100%); }
 body.theme-summer .login-main-content { background: linear-gradient(135deg, #e0f7fa 0%, #ffffff 100%); }
 body.theme-autumn .login-main-content { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); }
