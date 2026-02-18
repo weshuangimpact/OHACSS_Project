@@ -8,13 +8,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
-    <link href="style.css" rel="stylesheet">
     <script src="config.js"></script>
+    
     <script src="layout.js"></script>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="container-fluid main-content pb-5 mt-4">
+    <div class="container main-content pb-5 mt-4">
 
         <div class="mb-4">
             <h2 class="fw-bold text-dark mb-1">服務執行歷程管理 (Plan & Do)</h2>
@@ -42,7 +44,7 @@
                             <i class="fas fa-info-circle me-1"></i> 以下列出管理者針對案件 <strong id="history-case-number" class="text-dark">--</strong> 發出的補正要求與審查意見：
                         </div>
                         <div id="review-history-list">
-                        </div>
+                            </div>
                     </div>
                 </div>
             </div>
@@ -149,7 +151,7 @@
                                 </p>
                                 
                                 <div id="improvement-history-list" class="mb-3">
-                                </div>
+                                    </div>
 
                                 <div class="form-floating">
                                     <textarea class="form-control border-success" id="improvement-note-input" placeholder="Leave a comment here" style="height: 100px; background-color: #f8fff9;"></textarea>
@@ -191,8 +193,7 @@
                     </div>
                     <p class="mb-3">請問您是要「修改」剛才送審的案件，還是要「新增」另一筆不同日期的服務？</p>
 
-                    <div class="list-group mb-3" id="pending-list-group">
-                    </div>
+                    <div class="list-group mb-3" id="pending-list-group"></div>
 
                     <div class="d-grid">
                         <button class="btn btn-outline-primary fw-bold" id="btn-create-new">
@@ -208,30 +209,29 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script>
-        // 1. 初始化檢查
-        if (typeof window.AppConfig === 'undefined') {
-            alert('錯誤：Config 未載入');
-            throw new Error('AppConfig missing');
-        }
+        // ==========================================
+        // 初始化與依賴注入 (改用 AppConfig)
+        // ==========================================
+        // 1. 建立 Supabase Client (讀取 config.js)
+        const supabaseClient = supabase.createClient(window.AppConfig.Supabase.URL, window.AppConfig.Supabase.KEY);
+        const BUCKET_NAME = window.AppConfig.Supabase.BUCKET_NAME;
 
-        // 2. 使用 Config 初始化 Supabase
-        const supabaseClient = window.supabase.createClient(
-            window.AppConfig.Supabase.URL, 
-            window.AppConfig.Supabase.KEY
-        );
-        const BUCKET_NAME = window.AppConfig.Supabase.BUCKET_NAME || 'staging';
+        // 2. 讀取使用者 ID (讀取 config.js 定義的 key)
+        let currentUserId = sessionStorage.getItem(window.AppConfig.StorageKeys.USER_ID);
 
-        // 3. 全域變數定義
+        // ==========================================
+        // 頁面核心變數
+        // ==========================================
         let currentRecordId = null; // 母案 ID
-        let currentStagingId = null; // 暫存案 ID (同時也是資料夾名稱)
-        // 使用 Config Key 讀取 Session
-        let currentUserId = sessionStorage.getItem(window.AppConfig.StorageKeys.USER_ID); 
-        let currentCaseNumber = null; // 用來暫存目前的案號
-
-        let currentImprovementRecords = [];
+        let currentStagingId = null; // 暫存案 ID (資料夾名)
+        let currentCaseNumber = null; // 暫存案號
+        let currentImprovementRecords = []; // 改善紀錄暫存
+        
+        // Q 選項擴充
         const qSuffixes = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
         let qExtraCount = 0;
 
+        // 檢查清單項目定義
         const checklistItems = [
             { id: "main", code: "A", text: "勞工健康服務執行紀錄表 (執行當日紀錄主檔)" },
             { id: "9-1", code: "B", text: "9-1 勞工體格（健康）檢查結果之分析與評估、健康管理及資料保存。" },
@@ -252,14 +252,11 @@
             { id: "other", code: "Q", text: "其他附件 (Q)" }
         ];
 
-        // 4. 頁面初始化
-        document.addEventListener('DOMContentLoaded', () => { 
-            // 只有本頁特有的初始化邏輯 (共用邏輯已由 layout.js 處理)
-            renderChecklist(); 
-        });
+        // 頁面載入後渲染檢查清單
+        document.addEventListener('DOMContentLoaded', () => { renderChecklist(); });
 
         // ==========================================
-        // 介面渲染與操作邏輯
+        // UI 渲染邏輯 (Checkbox & File Inputs)
         // ==========================================
         function renderChecklist() {
             const container = document.getElementById('checkbox-list');
@@ -282,33 +279,35 @@
                 }
 
                 return `
-                    <div class="list-group-item p-3" id="item-row-${item.id}">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center gap-3" style="flex: 1;">
-                                <input class="form-check-input flex-shrink-0" type="checkbox" name="service-item" value="${item.id}" data-code="${item.code}" id="cb-${item.id}" style="font-size: 1.3em;" onchange="toggleItemAction('${item.id}')">
-                                <label class="form-check-label stretched-link pt-1" for="cb-${item.id}" style="cursor:pointer;">
-                                    <span class="badge bg-light text-dark border me-2 fw-bold" style="width: 25px;">${item.code}</span>
-                                    ${item.text}
-                                </label>
-                            </div>
-                            <div class="item-actions" id="action-${item.id}">
-                                <span class="me-2 small" id="file-info-${item.id}"></span>
-                                <input type="file" id="file-input-${item.id}" hidden accept="${acceptType}" onchange="handleItemFileUpload('${item.id}', '${item.code}', this)">
-                                <button type="button" class="btn btn-sm btn-outline-primary" id="btn-upload-${item.id}" onclick="triggerItemUpload('${item.id}')" style="position: relative; z-index: 2;">
-                                    <i class="fas fa-cloud-upload-alt me-1"></i> 上傳 <small class="ms-1 text-muted" style="font-size:0.7em;">(${fileTypeMsg})</small>
-                                </button>
-                                <div class="btn-group btn-group-sm" id="btn-group-${item.id}" style="display:none; position: relative; z-index: 2;">
-                                    <a href="#" target="_blank" class="btn btn-outline-info" id="btn-preview-${item.id}" title="預覽"><i class="fas fa-eye"></i></a>
-                                    <button type="button" class="btn btn-outline-secondary" onclick="triggerItemUpload('${item.id}')" title="更換"><i class="fas fa-sync-alt"></i></button>
-                                    <button type="button" class="btn btn-outline-danger" onclick="handleItemFileDelete('${item.id}', '${item.code}')" title="刪除"><i class="fas fa-trash-alt"></i></button>
-                                </div>
-                                <div id="spinner-${item.id}" style="display:none;" class="text-primary ms-2"><span class="spinner-border spinner-border-sm"></span></div>
-                            </div>
+                <div class="list-group-item p-3" id="item-row-${item.id}">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-3" style="flex: 1;">
+                            <input class="form-check-input flex-shrink-0" type="checkbox" name="service-item" value="${item.id}" data-code="${item.code}" id="cb-${item.id}" style="font-size: 1.3em;" onchange="toggleItemAction('${item.id}')">
+                            <label class="form-check-label stretched-link pt-1" for="cb-${item.id}" style="cursor:pointer;">
+                                <span class="badge bg-light text-dark border me-2 fw-bold" style="width: 25px;">${item.code}</span>
+                                ${item.text}
+                            </label>
                         </div>
-                        ${qBottomHtml} </div>`;
+                        <div class="item-actions" id="action-${item.id}">
+                            <span class="me-2 small" id="file-info-${item.id}"></span>
+                            <input type="file" id="file-input-${item.id}" hidden accept="${acceptType}" onchange="handleItemFileUpload('${item.id}', '${item.code}', this)">
+                            <button type="button" class="btn btn-sm btn-outline-primary" id="btn-upload-${item.id}" onclick="triggerItemUpload('${item.id}')" style="position: relative; z-index: 2;">
+                                <i class="fas fa-cloud-upload-alt me-1"></i> 上傳 <small class="ms-1 text-muted" style="font-size:0.7em;">(${fileTypeMsg})</small>
+                            </button>
+                            <div class="btn-group btn-group-sm" id="btn-group-${item.id}" style="display:none; position: relative; z-index: 2;">
+                                <a href="#" target="_blank" class="btn btn-outline-info" id="btn-preview-${item.id}" title="預覽"><i class="fas fa-eye"></i></a>
+                                <button type="button" class="btn btn-outline-secondary" onclick="triggerItemUpload('${item.id}')" title="更換"><i class="fas fa-sync-alt"></i></button>
+                                <button type="button" class="btn btn-outline-danger" onclick="handleItemFileDelete('${item.id}', '${item.code}')" title="刪除"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                            <div id="spinner-${item.id}" style="display:none;" class="text-primary ms-2"><span class="spinner-border spinner-border-sm"></span></div>
+                        </div>
+                    </div>
+                    ${qBottomHtml} 
+                </div>`;
             }).join('');
         }
 
+        // 動態產生 QA~QZ 列
         function addQExtraRow(existingCode = null) {
             let suffix;
             if (existingCode) {
@@ -378,7 +377,7 @@
         }
 
         // ==========================================
-        // 檔案處理 Logic 
+        // 檔案處理 (Upload & Delete)
         // ==========================================
         async function handleItemFileUpload(itemId, code, input) {
             if (!input.files || !input.files[0]) return;
@@ -392,6 +391,7 @@
                 const timestamp = Date.now();
                 const fileExt = file.name.split('.').pop() || 'dat'; 
                 const finalFileName = `${code}_${timestamp}.${fileExt}`;
+
                 const filePath = `${currentStagingId}/${finalFileName}`;
 
                 await deleteFileByPrefix(currentStagingId, `${code}_`);
@@ -462,7 +462,7 @@
         }
 
         // ==========================================
-        // 搜尋與選取邏輯
+        // 搜尋與業務邏輯
         // ==========================================
         async function searchRecords() {
             const year = document.getElementById('search-year').value.trim();
@@ -603,6 +603,7 @@
                 currentStagingId = stagingId;
             }
 
+            // 重置表單
             document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
             document.querySelectorAll('.item-actions').forEach(el => el.classList.remove('visible'));
             document.getElementById('service-type-select').value = "";
@@ -616,6 +617,7 @@
             document.getElementById('improvement-history-list').innerHTML = ''; 
             qExtraCount = 0;
             
+            // 重置審查歷程區塊
             const historySection = document.getElementById('review-history-section');
             const historyList = document.getElementById('review-history-list');
             const historyCaseNum = document.getElementById('history-case-number');
@@ -704,6 +706,7 @@
                 container.innerHTML = '';
                 return;
             }
+
             const sortedRecords = [...currentImprovementRecords].reverse();
             
             container.innerHTML = sortedRecords.map(record => `
@@ -857,7 +860,7 @@
                     service_year: recordData.service_year,
 
                     service_date: visitDate, 
-                    visit_date: visitDate,    
+                    visit_date: visitDate,   
                     start_time: startTime,
                     end_time: endTime,
 
