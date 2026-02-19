@@ -43,8 +43,15 @@ function initTheme() {
 
     // 策略 A：如果是登入頁 -> 強制黑白 (不載入任何主題 Class)
     if (isLoginPage) {
-        // 移除所有可能殘留的主題 Class，確保回到 style.css :root 的預設黑白樣式
-        body.classList.remove('theme-spring', 'theme-summer', 'theme-autumn', 'theme-winter');
+        // [修正點] 增加 theme-dog 與 theme-cat 的移除，確保登入頁維持預設樣式
+        body.classList.remove(
+            'theme-spring', 
+            'theme-summer', 
+            'theme-autumn', 
+            'theme-winter',
+            'theme-dog',
+            'theme-cat'
+        );
         console.log('[System] Login Page detected: Enforcing Default Theme (B&W).');
         return; // 結束函式，不讀取使用者設定
     }
