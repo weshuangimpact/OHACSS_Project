@@ -140,6 +140,8 @@
                                     <option value="theme-summer">☀️ 盛夏藍天 (Summer Breeze)</option>
                                     <option value="theme-autumn">🍁 秋意楓紅 (Autumn Maple)</option>
                                     <option value="theme-winter">❄️ 冬夜冰雪 (Winter Snow)</option>
+                                    <option value="theme-dog">🐶 綠意萌犬 (Dog Companion)</option>
+                                    <option value="theme-cat">🐱 優雅貓咪 (Cat Elegance)</option>
                                 </select>
                             </div>
                             <div class="d-grid">
@@ -235,7 +237,10 @@
 
             // 1. 即時套用至 body (讓使用者看到全站效果)
             // 先移除所有可能的主題 Class
-            body.classList.remove('theme-spring', 'theme-summer', 'theme-autumn', 'theme-winter');
+            body.classList.remove(
+                'theme-spring', 'theme-summer', 'theme-autumn', 'theme-winter',
+                'theme-dog', 'theme-cat' // [修正] 加入新主題的移除
+            );
             
             // 若非預設黑白，則加上對應 Class
             if (selectedTheme !== 'default') {
