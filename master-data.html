@@ -484,7 +484,7 @@
                             </div>
                         </div>
 
-                        <div class="row g-3 mb-3">
+                        <div class="row g-3 mb-3" style="display:none;">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold small">開始時間</label>
                                 <input type="time" class="form-control" id="record-start">
@@ -495,7 +495,7 @@
                             </div>
                         </div>
                         
-                        <div class="mb-3">
+                        <div class="mb-3" style="display:none;">
                             <label class="form-label fw-bold small">執行事項 (選填)</label>
                             <input type="text" class="form-control" id="record-items" placeholder="例如：噪音檢測、法規諮詢...">
                         </div>
@@ -628,7 +628,7 @@
     <script>
         // 初始化 Supabase (使用 Config)
         if (typeof window.AppConfig === 'undefined') {
-            console.error('Config not loaded!');
+            console.error('設定檔未載入！');
         }
 
         const supabaseClient = window.supabase.createClient(
@@ -1108,7 +1108,7 @@
             const { data: wpData, error: wpError } = await supabaseClient.from('workplaces').select('id').eq('company_id', companyId).limit(1);
             
             if (wpError || !wpData || wpData.length === 0) {
-                return alert('錯誤：該公司尚未建立作業場所 (Workplace)。請先至公司資料建立場所。');
+                return alert('錯誤：該公司尚未建立作業場所。請先至公司資料建立場所。');
             }
             const workplaceId = wpData[0].id;
 
