@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-<svg height="800px" width="800px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
-	 viewBox="0 0 512 512"  xml:space="preserve">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 423 402.5" style="enable-background:new 0 0 423 402.5;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:#000000;}
+	/* 統一白色半透明樣式 */
+	.st0{fill:#FFFFFF; fill-opacity: 0.9;}
 </style>
-<g>
+
+<g transform="translate(211.5, 201.25) scale(0.25) translate(-256, -256)">
 	<path class="st0" d="M504.302,195.59c-10.618-6.362-29.71-43.514-33.959-47.755c-4.249-4.256-28.662-13.81-28.662-13.81
 		l-13.795-43.514c-26.542,3.185-42.449,45.634-43.513,48.819c0,0-2.661,73.764-120.47,45.11
 		c-84.437-20.54-135.22-40.407-177.872-0.36c-2.668-4.578-4.491-9.234-5.822-14.257c-2.378-9.062-2.918-19.46-2.91-31.308
