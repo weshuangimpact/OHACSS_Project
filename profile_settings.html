@@ -9,7 +9,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
     <script src="config.js"></script>
-    
     <script src="layout.js"></script>
 
     <link href="style.css" rel="stylesheet">
@@ -81,22 +80,6 @@
             border-color: #545b62;
             color: white;
         }
-
-        /* 主題預覽區塊 */
-        .theme-preview-box {
-            height: 100px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            border: 2px solid #eee;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-            color: #666;
-            background-size: cover;
-            background-position: center;
-            transition: all 0.5s ease;
-        }
     </style>
 </head>
 <body>
@@ -125,16 +108,12 @@
                         <i class="fas fa-palette me-2"></i>系統外觀主題
                     </div>
                     <div class="card-body p-4">
-                        <p class="text-muted small mb-3">請選擇您喜歡的系統背景風格，設定將自動儲存。</p>
-                        
-                        <div class="theme-preview-box" id="theme-preview">
-                            <span class="bg-white px-2 py-1 rounded opacity-75">預覽區域</span>
-                        </div>
+                        <p class="text-muted small mb-3">請選擇您喜歡的系統背景風格，設定將即時套用並自動儲存。</p>
 
                         <form id="themeForm">
-                            <div class="mb-3">
+                            <div class="mb-4 mt-3">
                                 <label class="form-label fw-bold small">選擇主題</label>
-                                <select class="form-select" id="theme-select" onchange="previewTheme()">
+                                <select class="form-select form-select-lg" id="theme-select" onchange="previewTheme()">
                                     <option value="default">🔳 極簡黑白 (Black & White)</option>
                                     <option value="theme-spring">🌸 春日櫻花 (Spring Sakura)</option>
                                     <option value="theme-summer">☀️ 盛夏藍天 (Summer Breeze)</option>
@@ -144,9 +123,9 @@
                                     <option value="theme-cat">🐱 優雅貓咪 (Cat Elegance)</option>
                                 </select>
                             </div>
-                            <div class="d-grid">
+                            <div class="d-grid mt-2">
                                 <button type="button" class="btn btn-outline-primary" onclick="saveThemeSettings()">
-                                    <i class="fas fa-check me-2"></i>套用並儲存設定
+                                    <i class="fas fa-check me-2"></i>確認儲存設定
                                 </button>
                             </div>
                         </form>
@@ -233,29 +212,17 @@
         function previewTheme() {
             const selectedTheme = document.getElementById('theme-select').value;
             const body = document.body;
-            const previewBox = document.getElementById('theme-preview');
 
             // 1. 即時套用至 body (讓使用者看到全站效果)
-            // 先移除所有可能的主題 Class
             body.classList.remove(
                 'theme-spring', 'theme-summer', 'theme-autumn', 'theme-winter',
-                'theme-dog', 'theme-cat' // [修正] 加入新主題的移除
+                'theme-dog', 'theme-cat'
             );
             
             // 若非預設黑白，則加上對應 Class
             if (selectedTheme !== 'default') {
                 body.classList.add(selectedTheme);
             }
-
-            // 2. 更新預覽小區塊的樣式 (模擬背景)
-            // 為了讓預覽區塊也能顯示背景圖，我們將 computed style 複製過來
-            // 稍微延遲一下確保 CSS Class 生效
-            setTimeout(() => {
-                const computedStyle = window.getComputedStyle(body);
-                previewBox.style.backgroundImage = computedStyle.backgroundImage;
-                previewBox.style.backgroundColor = computedStyle.backgroundColor;
-                previewBox.style.backgroundSize = "100px 100px, cover"; // 預覽區塊縮小圖案
-            }, 50);
         }
 
         function saveThemeSettings() {
@@ -319,7 +286,7 @@
                 
                 // 3. 徹底清除並登出
                 await supabaseClient.auth.signOut();
-                localStorage.clear(); // 清除包含主題設定的所有快取 (選擇性，若想保留主題可改用 removeItem)
+                localStorage.clear(); 
                 sessionStorage.clear();
                 
                 // 跳轉回登入頁
