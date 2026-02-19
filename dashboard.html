@@ -82,10 +82,10 @@
 
         <div class="instruction-box">
             <div class="instruction-title">
-                <i class="fas fa-network-wired me-2"></i>系統設計精神：PDCA × Evidence × 5W1H
+                <i class="fas fa-network-wired me-2"></i>系統設計精神：內外雙軌閉環 (Dual-Loop PDCA) × Evidence × 5W1H
             </div>
             <p class="mb-0 text-dark" style="line-height: 1.6;">
-                本系統以 PDCA 持續改善循環 為核心，結合 Evidence-based 證據導向管理 與 5W1H 可追溯設計原則，將服務規劃、執行、審查與改善行動完整串聯於單一管理架構中。透過結構化資料與版本控管機制，確保所有服務與評鑑歷程皆可被重建、追溯與驗證，作為組織進行績效評估、合規審查與持續改善的可信基礎。
+                本系統採用 <strong>內外雙軌閉環 (Dual-Loop PDCA)</strong> 核心架構，結合 Evidence-based 證據導向與 5W1H 可追溯原則。第一層 (內迴圈) 透過主管查核把關日常服務品質與證據完整性；第二層 (外迴圈) 透過 AI 評鑑與稽核軌跡疊加，落實合規診斷與組織持續改善。確保所有歷程皆可被重建與驗證，作為績效評估與外部稽核的最強後盾。
             </p>
         </div>
 
@@ -104,8 +104,8 @@
                             </div>
                         </div>
                         <div class="guide-text">
-                            操作指引：<br>
-                            上傳訪視紀錄表、建立現場照片與基礎履歷資料。
+                            <strong>內迴圈起點：</strong><br>
+                            前端顧問負責完整上傳服務執行紀錄表及相關附件佐證，建立不可否認之第一手原始證據。
                         </div>
                     </div>
                 </div>
@@ -124,8 +124,28 @@
                             </div>
                         </div>
                         <div class="guide-text">
-                            操作指引：<br>
-                            查看各廠區績效統計、異常追蹤與執行成效報表。
+                            <strong>內迴圈把關：</strong><br>
+                            主管人員進行內部品質審視，若發現缺件可立即要求前端退回補正，確保所有資料達評鑑要求之結案標準。
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6" id="card-index3">
+                <div class="card dashboard-card bg-white card-eval" onclick="window.location.href='ai-assistant.html'">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="text-uppercase text-warning fw-bold small mb-1">Evaluation</h6>
+                                <h5 class="card-title fw-bold mb-2">評鑑支援助理</h5>
+                            </div>
+                            <div class="icon-wrapper bg-warning bg-opacity-10 text-warning">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                        </div>
+                        <div class="guide-text">
+                            <strong>外迴圈診斷：</strong><br>
+                            針對已內部結案的資料，模擬外部評鑑委員視角進行深度合規性診斷，並針對系統性缺失開立改善要求。
                         </div>
                     </div>
                 </div>
@@ -144,34 +164,13 @@
                             </div>
                         </div>
                         <div class="guide-text">
-                            操作指引：<br>
-                            依據評鑑結果進行證據補正與持續改善行動上傳。
+                            <strong>外迴圈疊加：</strong><br>
+                            承接評鑑缺失，由前端顧問或主管執行矯正措施。系統採「歷程疊加不覆蓋」原則，完整保留改善軌跡以供複檢。
                         </div>
                     </div>
                 </div>
             </div>      
             
-            <div class="col-xl-3 col-md-6" id="card-index3">
-                <div class="card dashboard-card bg-white card-eval" onclick="window.location.href='ai-assistant.html'">
-                    <div class="card-body p-4">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <h6 class="text-uppercase text-warning fw-bold small mb-1">Evaluation</h6>
-                                <h5 class="card-title fw-bold mb-2">評鑑支援助理</h5>
-                            </div>
-                            <div class="icon-wrapper bg-warning bg-opacity-10 text-warning">
-                                <i class="fas fa-tasks"></i>
-                            </div>
-                        </div>
-                        <div class="guide-text">
-                            操作指引：<br>
-                            執行評鑑指標自動檢核、產出合規性報表與建議。
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
             <div class="col-xl-3 col-md-6" id="card-index7">
                 <div class="card dashboard-card bg-white card-data" onclick="window.location.href='master-data.html'">
                     <div class="card-body p-4">
